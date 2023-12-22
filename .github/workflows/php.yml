@@ -1,0 +1,52 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: PHP
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  symfony-tests:
+    name: "PHP ${{ matrix.php-version }} / SF ${{ matrix.sf-version }} / ${{ matrix.operating-system }}"
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: ["ubuntu-latest"]
+        sf-version: ["7.1.*"]
+        php-version: ["8.2","8.3","8.4"]
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+      - uses: actions/checkout@v3
+      - name: PHP ${{ matrix.php-version }} extensions
+        run: |
+          php -m
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install Dependencies.
+        run: |
+          composer config minimum-stability dev
+          composer config extra.symfony.require ${{ matrix.sf-version }}
+          composer update --no-ansi --no-interaction --no-scripts --no-progress
+          php bin/console about
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: php vendor/bin/phpunit

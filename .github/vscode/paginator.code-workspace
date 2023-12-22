@@ -1,0 +1,60 @@
+{
+	"folders": [
+		{
+			"name": "paginator-bundle",
+			"path": "../../"
+		},
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"files.associations": {
+			".env.test": "dotenv",
+			"*.code-workspace": "json",
+			"composer.lock": "json",
+			"symfony.lock": "json",
+			"*phpstan.neon.dist": "yaml",
+			".scrutinizer": "yaml",
+			".php_cs.dist": "php",
+			"console": "php",
+			"phpunit": "php"
+		},
+		"files.insertFinalNewline": true,
+		"files.trimTrailingWhitespace": true,
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Listen for XDebug",
+				"type": "php",
+				"request": "launch",
+				"port": 9003
+			},
+			{
+				"name": "Launch currently open script",
+				"type": "php",
+				"request": "launch",
+				"program": "${file}",
+				"cwd": "${fileDirname}",
+				"port": 9003
+			},
+			{
+				"name": "Launch phpunit",
+				"type": "php",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/phpunit",
+				"cwd": "${workspaceFolder}",
+				"port": 9003
+			},
+			{
+				"name": "Launch console",
+				"type": "php",
+				"request": "launch",
+				"program": "${workspaceFolder}/lib/message-bundle/bin/console",
+				"cwd": "${workspaceFolder}",
+				"port": 9003
+			}
+		],
+		"compounds": []
+	}
+}
