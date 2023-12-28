@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Twig functions{% endblock %}
+
+{% block body %}
+<h1>Twig functions</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Cases</th>
+            {% for pages in tests %}
+                <th colspan="3">Current page : {{ pages.currentPage }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for case in cases %}
+           <tr>
+            <td>{{ case }}</td>
+            {% for pages in tests %}
+            <td>{{ page_class(pages, case) }}</td>
+            <td>{{ page_label(case) }}</td>
+            <td>{{ page_number(pages, case) }}</td>
+            {% endfor %}
+           </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

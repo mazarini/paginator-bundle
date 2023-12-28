@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pager{% endblock %}
+
+{% block body %}
+<h1>Pager</h1>
+{% embed '@MazariniPaginator/pages.html.twig' with {'pages': full} only %}
+{% block href %}
+{{ path('app_pager', {'page': page_number(pages, page)}) }}
+{% endblock %}
+{% endembed %}
+{% embed '@MazariniPaginator/pages.html.twig' with {'pages': partial} only %}
+{% block href %}
+{{ path('app_pager', {'page': page_number(pages, page)}) }}
+{% endblock %}
+{% endembed %}
+{% endblock %}

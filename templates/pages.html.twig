@@ -2,7 +2,7 @@
     <ul class="pagination justify-content-center">
         {% for page in pages %}
             <li class="page-item{{ page_class(pages, page) }}">
-                <a class="page-link" href="{% block href %}{% endblock %}">{{ page_label(pages, page, '<', '>') }}</a>
+                <a class="page-link" href="{% block href %}{% endblock %}">{{ page_label(page)|raw }}</a>
             </li>
         {% endfor %}
     </ul>

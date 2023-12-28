@@ -44,8 +44,8 @@ class Request extends Config
     public function __construct(int $currentPage = null, array $criterias = [], array $orderBy = [], array $options = [])
     {
         $this->currentPage = $currentPage;
-        $this->$criterias = $criterias;
-        $this->$orderBy = $orderBy;
+        $this->criterias = $criterias;
+        $this->orderBy = $orderBy;
         parent::__construct($options);
     }
 

@@ -22,6 +22,7 @@ namespace Mazarini\PaginatorBundle;
 use Mazarini\PaginatorBundle\Controller\PageController;
 use Mazarini\PaginatorBundle\Pager\Config;
 use Mazarini\PaginatorBundle\Twig\Extension\PageExtension;
+use Mazarini\PaginatorBundle\Twig\Runtime\PageExtensionRuntime;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -32,28 +33,33 @@ class MazariniPaginatorBundle extends AbstractBundle
     /**
      * loadExtension.
      *
-     * @param array<mixed> $config
+     * @param array<array<string>> $config
      */
     public function loadExtension(array $config, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
-        $defaultPaginator = $config;
-        unset($defaultPaginator['controller']);
-        Config::setDefaultOption($defaultPaginator);
-        PageController::setPagerControllerOptions($config['controller']);
         $services = $containerConfigurator->services();
-        $services->load('Mazarini\PaginatorBundle\\', __DIR__.'')
-            ->exclude([
-                __DIR__.'/Controller/',
-                __DIR__.'/DependencyInjection/',
-                __DIR__.'/Pager/',
-                __DIR__.'/Entity/',
-                __DIR__.'/Kernel.php',
-            ]);
-        $services->set(self::class)
-            ->public();
+        $services->set(PageExtensionRuntime::class)
+            ->arg('$classCommon', $config['class']['common'])
+            ->arg('$classCurrent', $config['class']['current'])
+            ->arg('$classDisable', $config['class']['disable'])
+            ->arg('$labelFirst', $config['label']['first'])
+            ->arg('$labelPrevious', $config['label']['previous'])
+            ->arg('$labelNext', $config['label']['next'])
+            ->arg('$labelLast', $config['label']['last'])
+            ->tag('twig.runtime')
+            ->public()
+        ;
         $services->set(PageExtension::class)
             ->tag('twig.extension')
-            ->public();
+            ->public()
+        ;
+
+        /*
+            $defaultPaginator = $config;
+            unset($defaultPaginator['controller']);
+            Config::setDefaultOption($defaultPaginator);
+            PageController::setPagerControllerOptions($config['controller']);
+       */
     }
 
     public function configure(DefinitionConfigurator $definition): void
@@ -61,22 +67,32 @@ class MazariniPaginatorBundle extends AbstractBundle
         // if the configuration is short, consider adding it in this class
         $definition->rootNode()
             ->children()
+            ->arrayNode('pager')
+            ->children()
+            ->booleanNode('display_previous_next')->defaultValue(false)->end()
             ->booleanNode('display_one_page')->defaultValue(false)->end()
             ->integerNode('all_pages_limit')->defaultValue(9)->end()
             ->integerNode('pages_number_count')->defaultValue(3)->end()
             ->integerNode('per_page')->defaultValue(10)->end()
-            ->arrayNode('controller')
-            ->useAttributeAsKey('name')
-            ->arrayPrototype()
+            ->end()
+            ->end()
+            ->arrayNode('class')
             ->children()
-            ->booleanNode('display_one_page')->end()
-            ->integerNode('all_pages_limit')->end()
-            ->integerNode('pages_number_count')->end()
-            ->integerNode('per_page')->end()
+            ->scalarNode('common')->defaultValue('page-item')->end()
+            ->scalarNode('current')->defaultValue('active')->end()
+            ->scalarNode('disable')->defaultValue('disabled')->end()
+            ->end()
+            ->end()
+            ->arrayNode('label')
+            ->children()
+            ->scalarNode('first')->defaultValue('&#xF563;')->end()
+            ->scalarNode('previous')->defaultValue('&#xF22D;')->end()
+            ->scalarNode('next')->defaultValue('&#xF231;')->end()
+            ->scalarNode('last')->defaultValue('&#xF557;')->end()
             ->end()
             ->end()
             ->end()
-            ->end();
+        ;
     }
 
     public function getPath(): string

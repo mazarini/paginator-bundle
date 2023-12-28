@@ -37,7 +37,7 @@ class PageCollection extends Request implements \ArrayAccess, \Iterator, \counta
      */
     public function offsetExists(mixed $offset): bool
     {
-        return $this->data->offsetExists($offset);
+        return $this->getData()->offsetExists($offset);
     }
 
     /**
@@ -147,14 +147,23 @@ class PageCollection extends Request implements \ArrayAccess, \Iterator, \counta
         if ($this->isDisplayOnePage() || 1 < $this->getLastPage()) {
             if ($this->getAllPagesLimit() > $this->getLastPage()) {
                 $data[] = 'first';
+                if ($this->isDisplayPreviousNext()) {
+                    $data[] = 'previous';
+                }
+                $start = max(1, $this->getCurrentPage() - (int) (($this->getPagesNumberCount() - 1) / 2));
+                $end = min($start + $this->getPagesNumberCount() - 1, $this->getLastPage());
+                $start = max(1, $end - $this->getPagesNumberCount() + 1);
+            } else {
+                $start = 1;
+                $end = $this->getLastPage();
             }
-            $start = $this->getCurrentPage() - (int) ($this->getPagesNumberCount() / 2);
-            $end = min($start + $this->getPagesNumberCount(), $this->getLastPage());
-            $start = max(1, $end - $this->getPagesNumberCount());
             for ($i = $start; $i <= $end; ++$i) {
                 $data[] = $i;
             }
             if ($this->getAllPagesLimit() > $this->getLastPage()) {
+                if ($this->isDisplayPreviousNext()) {
+                    $data[] = 'next';
+                }
                 $data[] = 'last';
             }
         }

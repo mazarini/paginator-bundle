@@ -57,6 +57,11 @@ class Config
         return true === $this->options['display_one_page'];
     }
 
+    protected function isDisplayPreviousNext(): bool
+    {
+        return true === $this->options['display_previous_next'];
+    }
+
     protected function getAllPagesLimit(): int
     {
         return (int) $this->options['all_pages_limit'];

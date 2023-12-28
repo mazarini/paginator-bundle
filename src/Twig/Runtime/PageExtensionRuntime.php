@@ -24,32 +24,44 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class PageExtensionRuntime implements RuntimeExtensionInterface
 {
-    public function __construct()
-    {
-        // Inject dependencies if needed
+    public function __construct(
+        private string $classCommon,
+        private string $classCurrent,
+        private string $classDisable,
+        private string $labelFirst,
+        private string $labelPrevious,
+        private string $labelNext,
+        private string $labelLast,
+    ) {
     }
 
     public function getPageClass(PageCollection $pages, int|string $page): string
     {
-        switch (true) {
-            case 'first' === $page:
-                return '';
-            case 'last' === $page:
-                return '';
-            case $page === $pages->getCurrentPage():
-                return ' active';
-            default:
-                return '';
+        $class = $this->classCommon;
+        if (('first' === $page || 'previous' === $page) && 1 === $pages->getCurrentPage()) {
+            return $class.' '.$this->classDisable;
         }
+        if (('next' === $page || 'last' === $page) && $pages->getCurrentPage() === $pages->getLastPage()) {
+            return $class.' '.$this->classDisable;
+        }
+        if ($pages->getCurrentPage() === $page) {
+            return $class.' '.$this->classCurrent;
+        }
+
+        return $class;
     }
 
-    public function getPageLabel(int|string $page, string $first, string $last): string
+    public function getPageLabel(int|string $page): string
     {
         switch (true) {
             case 'first' === $page:
-                return $first;
+                return $this->labelFirst;
+            case 'previous' === $page:
+                return $this->labelPrevious;
+            case 'next' === $page:
+                return $this->labelNext;
             case 'last' === $page:
-                return $last;
+                return $this->labelLast;
             default:
                 return (string) $page;
         }
@@ -60,6 +72,10 @@ class PageExtensionRuntime implements RuntimeExtensionInterface
         switch (true) {
             case 'first' === $page:
                 return 1;
+            case 'previous' === $page:
+                return max(1, $pages->getCurrentPage() - 1);
+            case 'next' === $page:
+                return min($pages->getLastpage(), $pages->getCurrentPage() + 1);
             case 'last' === $page:
                 return $pages->getLastpage();
             default:
