@@ -1,0 +1,16 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition\\:\\:children\\(\\)\\.$#"
+			count: 1
+			path: ../../src/MazariniPaginatorBundle.php
+
+		-
+			message: "#^Parameter \\#1 \\$options of static method Mazarini\\\\PaginatorBundle\\\\Pager\\\\Config\\:\\:setDefaultOption\\(\\) expects array\\<string, bool\\|int\\>, array\\<mixed, mixed\\> given\\.$#"
+			count: 1
+			path: ../../src/MazariniPaginatorBundle.php
+
+		-
+			message: "#^Parameter \\#1 \\$pagerControllerOptions of static method Mazarini\\\\PaginatorBundle\\\\Controller\\\\PageController\\:\\:setPagerControllerOptions\\(\\) expects array\\<string, array\\<string, bool\\|int\\>\\>, mixed given\\.$#"
+			count: 1
+			path: ../../src/MazariniPaginatorBundle.php

@@ -5,8 +5,8 @@ phpcs:
 	~/.composer/vendor/bin/php-cs-fixer fix
 
 twigcs:
-	~/.composer/vendor/bin/twigcs
-	bin/console lint:twig
+	~/.composer/vendor/bin/twigcs templates tests/templates
+	bin/console lint:twig templates tests/templates
 
 phpstan:
 	~/.composer/vendor/bin/phpstan
