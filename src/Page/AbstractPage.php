@@ -17,32 +17,31 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Twig\Runtime;
+namespace Mazarini\PaginatorBundle\Page;
 
-use Mazarini\PaginatorBundle\Page\AbstractPage;
-use Twig\Extension\RuntimeExtensionInterface;
+use Mazarini\PaginatorBundle\Pager\PageCollectionInterface;
 
-class PageExtensionRuntime implements RuntimeExtensionInterface
+abstract class AbstractPage
 {
-    public function __construct(
-        private string $classCommon,
-        private string $classCurrent,
-        private string $classDisable,
-    ) {
+    private PageCollectionInterface $parent;
+
+    abstract public function getNumber(): int;
+
+    abstract public function getLabel(): string;
+    abstract public function isCurrent(): bool;
+
+    abstract public function isDisable(): bool;
+
+
+    protected function getParent(): PageCollectionInterface
+    {
+        return $this->parent;
     }
 
-    public function getPageClass(AbstractPage $page): string
+    public function setParent(PageCollectionInterface $parent): static
     {
-        $class = $this->classCommon;
+        $this->parent = $parent;
 
-        if ($page->isCurrent()) {
-            $class .= ' ' . $this->classCurrent;
-        }
-
-        if ($page->isDisable()) {
-            $class .= ' ' . $this->classDisable;
-        }
-
-        return $class;
+        return $this;
     }
 }

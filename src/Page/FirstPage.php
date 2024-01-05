@@ -17,32 +17,12 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Twig\Runtime;
+namespace Mazarini\PaginatorBundle\Page;
 
-use Mazarini\PaginatorBundle\Page\AbstractPage;
-use Twig\Extension\RuntimeExtensionInterface;
-
-class PageExtensionRuntime implements RuntimeExtensionInterface
+class FirstPage extends NavPage
 {
-    public function __construct(
-        private string $classCommon,
-        private string $classCurrent,
-        private string $classDisable,
-    ) {
-    }
-
-    public function getPageClass(AbstractPage $page): string
+    public function getNumber(): int
     {
-        $class = $this->classCommon;
-
-        if ($page->isCurrent()) {
-            $class .= ' ' . $this->classCurrent;
-        }
-
-        if ($page->isDisable()) {
-            $class .= ' ' . $this->classDisable;
-        }
-
-        return $class;
+        return 1;
     }
 }

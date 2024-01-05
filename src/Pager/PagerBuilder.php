@@ -17,32 +17,31 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Twig\Runtime;
+namespace Mazarini\PaginatorBundle\Pager;
 
-use Mazarini\PaginatorBundle\Page\AbstractPage;
-use Twig\Extension\RuntimeExtensionInterface;
+use Mazarini\PaginatorBundle\Page\PageBuilder;
 
-class PageExtensionRuntime implements RuntimeExtensionInterface
+class PagerBuilder
 {
     public function __construct(
-        private string $classCommon,
-        private string $classCurrent,
-        private string $classDisable,
+        private PageBuilder $pageBuilder,
+        private bool $displayPreviousNext,
+        private bool $displayOnePage,
+        private int $allPagesLimit,
+        private int $pagesNumberCount,
+        private int $itemsPerPage,
     ) {
     }
-
-    public function getPageClass(AbstractPage $page): string
+    public function CreatePager(?int $currentPage = null): Pager
     {
-        $class = $this->classCommon;
-
-        if ($page->isCurrent()) {
-            $class .= ' ' . $this->classCurrent;
-        }
-
-        if ($page->isDisable()) {
-            $class .= ' ' . $this->classDisable;
-        }
-
-        return $class;
+        return new Pager(
+            $this->pageBuilder,
+            $currentPage,
+            $this->displayPreviousNext,
+            $this->displayOnePage,
+            $this->allPagesLimit,
+            $this->pagesNumberCount,
+            $this->itemsPerPage
+        );
     }
 }

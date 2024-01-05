@@ -34,8 +34,6 @@ class PageExtension extends AbstractExtension
     {
         return [
             new TwigFunction('page_class', [PageExtensionRuntime::class, 'getPageClass']),
-            new TwigFunction('page_label', [PageExtensionRuntime::class, 'getPageLabel', ['is_safe' => ['html']]]),
-            new TwigFunction('page_number', [PageExtensionRuntime::class, 'getPageNumber']),
         ];
     }
 }

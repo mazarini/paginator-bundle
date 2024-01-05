@@ -9,20 +9,21 @@
         <tr>
             <th>Cases</th>
             {% for pages in tests %}
-                <th colspan="3">Current page : {{ pages.currentPage }}</th>
+            <th colspan="3">Current page : {{ pages.currentPage }}</th>
             {% endfor %}
         </tr>
     </thead>
     <tbody>
-        {% for case in cases %}
-           <tr>
-            <td>{{ case }}</td>
+        {% for i in 0..6 %}
+        <tr>
+            <td>{{ cases[i] }}</td>
             {% for pages in tests %}
-            <td>{{ page_class(pages, case) }}</td>
-            <td>{{ page_label(case) }}</td>
-            <td>{{ page_number(pages, case) }}</td>
+                {% for page in pages %}{% endfor %}
+            <td>{{ page_class(pages[i]) }}</td>
+            <td>{{ pages[i].label|raw }}</td>
+            <td>{{ pages[i].number }}</td>
             {% endfor %}
-           </tr>
+        </tr>
         {% endfor %}
     </tbody>
 </table>

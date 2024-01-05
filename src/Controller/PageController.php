@@ -20,7 +20,7 @@
 namespace Mazarini\PaginatorBundle\Controller;
 
 use Mazarini\PaginatorBundle\Entity\EntityInterface;
-use Mazarini\PaginatorBundle\Pager\PageCollection;
+use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,47 +28,34 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class PageController extends AbstractController
 {
-    /**
-     * @var array<string,array<string,int|bool>>
-     */
-    private static array $pagerControllerOptions = [];
+    private bool $displayPreviousNext;
+    private bool $displayOnePage;
+    private int $allPagesLimit;
+    private int $pagesNumberCount;
+    private int $itemsPerPage;
     protected ?EntityInterface $parent = null;
-    protected EntityInterface $entity;
-
-    /**
-     * @var array<string,mixed>
-     */
-    protected array $criterias = [];
-    /**
-     * @var array<string,'ASC'|'DESC'>
-     */
-    protected array $orderBy = [];
-    /**
-     * @var array<string,mixed>
-     */
-    /**
-     * @var array<string,int|bool>
-     */
-    protected array $pagerOptions = [];
     protected string $listTemplate;
-
-    /**
-     * pageAction.
-     */
-    /**
-     * pageAction.
-     *
-     * @param ?int $currentPage
-     */
-    public function pageAction(PageRepository $articleRepository, int $currentPage = null): Response
+    public function pageAction(PageRepository $articleRepository, PagerBuilder $pagerBuilder, int $currentPage = null): Response
     {
-        if (isset(self::$pagerControllerOptions[$this::class])) {
-            $this->pagerOptions = array_merge($this->pagerOptions, self::$pagerControllerOptions[$this::class]);
+        $pages = $pagerBuilder->CreatePager($currentPage);
+        if (isset($this->displayPreviousNext)) {
+            $pages->setDisplayPreviousNext($this->displayPreviousNext);
         }
-        $pages = new PageCollection($currentPage, $this->criterias, $this->orderBy, $this->pagerOptions);
+        if (isset($this->displayOnePage)) {
+            $pages->setDisplayOnePage($this->displayOnePage);
+        }
+        if (isset($this->allPagesLimit)) {
+            $pages->setAllPagesLimit($this->allPagesLimit);
+        }
+        if (isset($this->pagesNumberCount)) {
+            $pages->setPagesNumberCount($this->pagesNumberCount);
+        }
+        if (isset($this->itemsPerPage)) {
+            $pages->setItemsPerPage($this->itemsPerPage);
+        }
         $entities = $articleRepository->getPageData($pages);
-        if (!$pages->isRequestOK()) {
-            throw new NotFoundHttpException('Sorry page not existing!');
+        if (!$pages->isPageCurrentOK()) {
+            return $this->redirectToPage(1);
         }
 
         return $this->render($this->listTemplate, [
@@ -78,13 +65,5 @@ abstract class PageController extends AbstractController
         ]);
     }
 
-    /**
-     * Set the value of pagerControllerOptions.
-     *
-     * @param array<string,array<string,bool|int>> $pagerControllerOptions
-     */
-    public static function setPagerControllerOptions(array $pagerControllerOptions): void
-    {
-        self::$pagerControllerOptions = $pagerControllerOptions;
-    }
+    abstract protected function redirectToPage(int $page): Response;
 }

@@ -19,7 +19,7 @@
 
 namespace App\Controller;
 
-use Mazarini\PaginatorBundle\Pager\PageCollection;
+use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,20 +33,14 @@ class HomeController extends AbstractController
     }
 
     #[Route('/twig-function', name: 'app_twig_function')]
-    public function twigFunction(): Response
+    public function twigFunction(PagerBuilder $pagerBuilder): Response
     {
         $currentPage = 1;
-        $criterias = [];
-        $orderBy = [];
-        $options = [
-            'display_previous_next' => false,
-            'display_one_page' => false,
-            'all_pages_limit' => 9,
-            'pages_number_count' => 3,
-            'per_page' => 10,
-        ];
         foreach ([1, 3, 7] as $currentPage) {
-            $tests[$currentPage] = new PageCollection($currentPage, $criterias, $orderBy, $options);
+            $tests[$currentPage] = $pagerBuilder->CreatePager($currentPage)
+                ->setAllPagesLimit(10)
+                ->setDisplayPreviousNext(true)
+            ;
             $tests[$currentPage]->setCount(70);
         }
         $cases = ['first', 'previous', 1, 3, 7, 'next', 'last'];
@@ -58,24 +52,17 @@ class HomeController extends AbstractController
     }
 
     #[Route('/pager/{page}', name: 'app_pager')]
-    public function page(int $page): Response
+    public function page(PagerBuilder $pagerBuilder, int $page): Response
     {
-        $criterias = [];
-        $orderBy = [];
-        $options = [
-            'display_previous_next' => true,
-            'display_one_page' => false,
-            'all_pages_limit' => 9,
-            'pages_number_count' => 3,
-            'per_page' => 10,
-        ];
-        $options['all_pages_limit'] = 10;
-        $full = new PageCollection($page, $criterias, $orderBy, $options);
-        $full->setCount(90);
-        $options['all_pages_limit'] = 8;
-        $partial = new PageCollection($page, $criterias, $orderBy, $options);
-        $partial->setCount(90);
-
+        $full = $pagerBuilder->CreatePager($page)
+            ->setAllPagesLimit(10)
+            ->setDisplayPreviousNext(true)
+            ->setLastPage(9)
+        ;
+        $partial = $pagerBuilder->CreatePager($page)
+            ->setAllPagesLimit(8)
+            ->setLastPage(9)
+        ;
         return $this->render('home/pager.html.twig', [
             'full' => $full,
             'partial' => $partial,

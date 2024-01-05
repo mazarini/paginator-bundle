@@ -20,7 +20,13 @@
 namespace Mazarini\PaginatorBundle;
 
 use Mazarini\PaginatorBundle\Controller\PageController;
-use Mazarini\PaginatorBundle\Pager\Config;
+use Mazarini\PaginatorBundle\Page\PageBuilder;
+use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Mazarini\PaginatorBundle\Page\FirstPage;
+use Mazarini\PaginatorBundle\Page\LastPage;
+use Mazarini\PaginatorBundle\Page\NextPage;
+use Mazarini\PaginatorBundle\Page\PreviousPage;
+use Mazarini\PaginatorBundle\Pager\Pager;
 use Mazarini\PaginatorBundle\Twig\Extension\PageExtension;
 use Mazarini\PaginatorBundle\Twig\Runtime\PageExtensionRuntime;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -33,19 +39,20 @@ class MazariniPaginatorBundle extends AbstractBundle
     /**
      * loadExtension.
      *
-     * @param array<array<string>> $config
+     * @param array<array<mixed>> $config
      */
     public function loadExtension(array $config, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
         $services = $containerConfigurator->services();
+
+        $services->defaults()
+            ->autowire()
+            ->autoconfigure()
+        ;
         $services->set(PageExtensionRuntime::class)
             ->arg('$classCommon', $config['class']['common'])
             ->arg('$classCurrent', $config['class']['current'])
             ->arg('$classDisable', $config['class']['disable'])
-            ->arg('$labelFirst', $config['label']['first'])
-            ->arg('$labelPrevious', $config['label']['previous'])
-            ->arg('$labelNext', $config['label']['next'])
-            ->arg('$labelLast', $config['label']['last'])
             ->tag('twig.runtime')
             ->public()
         ;
@@ -53,13 +60,22 @@ class MazariniPaginatorBundle extends AbstractBundle
             ->tag('twig.extension')
             ->public()
         ;
+        $services->set(PageBuilder::class)
+            ->arg('$firstPageLabel', $config['label']['first'])
+            ->arg('$previousPageLabel', $config['label']['previous'])
+            ->arg('$nextPageLabel', $config['label']['next'])
+            ->arg('$lastPageLabel', $config['label']['last'])
+            ->public()
+        ;
 
-        /*
-            $defaultPaginator = $config;
-            unset($defaultPaginator['controller']);
-            Config::setDefaultOption($defaultPaginator);
-            PageController::setPagerControllerOptions($config['controller']);
-       */
+        $services->set(PagerBuilder::class)
+            ->arg('$displayPreviousNext', $config['pager']['display_previous_next'])
+            ->arg('$displayOnePage', $config['pager']['display_one_page'])
+            ->arg('$allPagesLimit', $config['pager']['all_pages_limit'])
+            ->arg('$pagesNumberCount', $config['pager']['pages_number_count'])
+            ->arg('$itemsPerPage', $config['pager']['per_page'])
+            ->public()
+        ;
     }
 
     public function configure(DefinitionConfigurator $definition): void
@@ -85,10 +101,10 @@ class MazariniPaginatorBundle extends AbstractBundle
             ->end()
             ->arrayNode('label')
             ->children()
-            ->scalarNode('first')->defaultValue('&#xF563;')->end()
-            ->scalarNode('previous')->defaultValue('&#xF22D;')->end()
-            ->scalarNode('next')->defaultValue('&#xF231;')->end()
-            ->scalarNode('last')->defaultValue('&#xF557;')->end()
+            ->scalarNode('first')->defaultValue('<i class="bi bi-skip-start-fill"></i>')->end()
+            ->scalarNode('previous')->defaultValue('<i class="bi bi-caret-left-fill"></i>')->end()
+            ->scalarNode('next')->defaultValue('<i class="bi bi-caret-right-fill"></i>')->end()
+            ->scalarNode('last')->defaultValue('<i class="bi bi-skip-end-fill"></i>')->end()
             ->end()
             ->end()
             ->end()

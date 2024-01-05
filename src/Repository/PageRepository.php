@@ -22,7 +22,7 @@ namespace Mazarini\PaginatorBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Mazarini\PaginatorBundle\Entity\EntityInterface;
-use Mazarini\PaginatorBundle\Pager\PageCollection;
+use Mazarini\PaginatorBundle\Pager\Pager;
 
 /**
  * @extends ServiceEntityRepository<EntityInterface>
@@ -43,7 +43,7 @@ abstract class PageRepository extends ServiceEntityRepository
      *
      * @return array<entityInterface>
      */
-    public function getPageData(PageCollection $paginator): array
+    public function getPageData(Pager $paginator): array
     {
         $count = $this->count($paginator->getCriterias());
         $paginator->setCount($count);

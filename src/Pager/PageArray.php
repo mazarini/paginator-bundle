@@ -17,32 +17,39 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Twig\Runtime;
+namespace Mazarini\PaginatorBundle\Pager;
 
 use Mazarini\PaginatorBundle\Page\AbstractPage;
-use Twig\Extension\RuntimeExtensionInterface;
+use Mazarini\PaginatorBundle\Pager\PageCollectionInterface;
 
-class PageExtensionRuntime implements RuntimeExtensionInterface
+/**
+ * @extends \ArrayIterator<int,AbstractPage>
+ */
+abstract class PageArray extends \ArrayIterator implements PageCollectionInterface
 {
-    public function __construct(
-        private string $classCommon,
-        private string $classCurrent,
-        private string $classDisable,
-    ) {
-    }
-
-    public function getPageClass(AbstractPage $page): string
+    public function append(mixed $value): void
     {
-        $class = $this->classCommon;
-
-        if ($page->isCurrent()) {
-            $class .= ' ' . $this->classCurrent;
-        }
-
-        if ($page->isDisable()) {
-            $class .= ' ' . $this->classDisable;
-        }
-
-        return $class;
+        parent::append($value->setParent($this));
     }
+    public function offsetSet(mixed $key, mixed $value): void
+    {
+        parent::offsetSet($key, $value->setParent($this));
+    }
+
+    public function rewind(): void
+    {
+        if (parent::count() === 0) {
+            $this->buildPager();
+        }
+        parent::rewind();
+    }
+
+    public function count(): int
+    {
+        if (parent::count() === 0) {
+            $this->buildPager();
+        }
+        return parent::count();
+    }
+    abstract protected function buildPager(): void;
 }
