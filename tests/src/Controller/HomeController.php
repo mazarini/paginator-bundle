@@ -63,6 +63,7 @@ class HomeController extends AbstractController
             ->setAllPagesLimit(8)
             ->setLastPage(9)
         ;
+
         return $this->render('home/pager.html.twig', [
             'full' => $full,
             'partial' => $partial,

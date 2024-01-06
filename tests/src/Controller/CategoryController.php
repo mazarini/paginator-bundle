@@ -17,12 +17,21 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Page;
+namespace App\Controller;
 
-class LastPage extends NavPage
+use App\Repository\CategoryRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route('/category')]
+class CategoryController extends AbstractController
 {
-    public function getNumber(): int
+    #[Route('/', name: 'app_category_page', methods: ['GET'])]
+    public function index(CategoryRepository $categoryRepository): Response
     {
-        return $this->getParent()->getLastPage();
+        return $this->render('category/index.html.twig', [
+            'categories' => $categoryRepository->findAll(),
+        ]);
     }
 }

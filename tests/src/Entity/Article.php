@@ -17,31 +17,43 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Page;
+namespace App\Entity;
 
-class NumberPage extends AbstractPage
+use App\Repository\ArticleRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Mazarini\PaginatorBundle\Entity\Entity;
+
+#[ORM\Entity(repositoryClass: ArticleRepository::class)]
+class Article extends Entity
 {
-    public function __construct(private int $number)
-    {
-    }
+    #[ORM\Column(length: 31)]
+    private ?string $label = null;
 
-    public function getNumber(): int
-    {
-        return $this->number;
-    }
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Category $Category;
 
     public function getLabel(): string
     {
-        return (string) $this->number;
+        return $this->label ?? '';
     }
 
-    public function isCurrent(): bool
+    public function setLabel(string $label): static
     {
-        return $this->number === $this->getParent()->getCurrentPage();
+        $this->label = $label;
+
+        return $this;
     }
 
-    public function isDisable(): bool
+    public function getCategory(): Category
     {
-        return false;
+        return $this->Category;
+    }
+
+    public function setCategory(Category $Category): static
+    {
+        $this->Category = $Category;
+
+        return $this;
     }
 }

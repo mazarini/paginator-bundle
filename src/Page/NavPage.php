@@ -25,10 +25,12 @@ abstract class NavPage extends AbstractPage
         private string $label
     ) {
     }
+
     public function isCurrent(): bool
     {
         return false;
     }
+
     public function isDisable(): bool
     {
         return
@@ -36,6 +38,7 @@ abstract class NavPage extends AbstractPage
             || $this->getParent()->getCurrentPage() === $this->getParent()->getLastPage() && $this->getNumber() >= $this->getParent()->getLastPage()
         ;
     }
+
     public function getLabel(): string
     {
         return $this->label;

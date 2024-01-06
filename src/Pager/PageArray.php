@@ -20,7 +20,6 @@
 namespace Mazarini\PaginatorBundle\Pager;
 
 use Mazarini\PaginatorBundle\Page\AbstractPage;
-use Mazarini\PaginatorBundle\Pager\PageCollectionInterface;
 
 /**
  * @extends \ArrayIterator<int,AbstractPage>
@@ -31,6 +30,7 @@ abstract class PageArray extends \ArrayIterator implements PageCollectionInterfa
     {
         parent::append($value->setParent($this));
     }
+
     public function offsetSet(mixed $key, mixed $value): void
     {
         parent::offsetSet($key, $value->setParent($this));
@@ -38,7 +38,7 @@ abstract class PageArray extends \ArrayIterator implements PageCollectionInterfa
 
     public function rewind(): void
     {
-        if (parent::count() === 0) {
+        if (0 === parent::count()) {
             $this->buildPager();
         }
         parent::rewind();
@@ -46,10 +46,12 @@ abstract class PageArray extends \ArrayIterator implements PageCollectionInterfa
 
     public function count(): int
     {
-        if (parent::count() === 0) {
+        if (0 === parent::count()) {
             $this->buildPager();
         }
+
         return parent::count();
     }
+
     abstract protected function buildPager(): void;
 }

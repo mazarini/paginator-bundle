@@ -32,7 +32,8 @@ class PagerBuilder
         private int $itemsPerPage,
     ) {
     }
-    public function CreatePager(?int $currentPage = null): Pager
+
+    public function CreatePager(int $currentPage = null): Pager
     {
         return new Pager(
             $this->pageBuilder,

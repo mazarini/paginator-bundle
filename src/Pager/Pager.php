@@ -20,11 +20,6 @@
 namespace Mazarini\PaginatorBundle\Pager;
 
 use Mazarini\PaginatorBundle\Page\PageBuilder;
-use Mazarini\PaginatorBundle\Page\FirstPage;
-use Mazarini\PaginatorBundle\Page\LastPage;
-use Mazarini\PaginatorBundle\Page\NextPage;
-use Mazarini\PaginatorBundle\Page\NumberPage;
-use Mazarini\PaginatorBundle\Page\PreviousPage;
 
 class Pager extends PageManager
 {
@@ -46,6 +41,7 @@ class Pager extends PageManager
             $itemsPerPage
         );
     }
+
     protected function buildPager(): void
     {
         if ($this->getDisplayOnePage() || 1 < $this->getLastPage()) {

@@ -19,14 +19,8 @@
 
 namespace Mazarini\PaginatorBundle;
 
-use Mazarini\PaginatorBundle\Controller\PageController;
 use Mazarini\PaginatorBundle\Page\PageBuilder;
 use Mazarini\PaginatorBundle\Pager\PagerBuilder;
-use Mazarini\PaginatorBundle\Page\FirstPage;
-use Mazarini\PaginatorBundle\Page\LastPage;
-use Mazarini\PaginatorBundle\Page\NextPage;
-use Mazarini\PaginatorBundle\Page\PreviousPage;
-use Mazarini\PaginatorBundle\Pager\Pager;
 use Mazarini\PaginatorBundle\Twig\Extension\PageExtension;
 use Mazarini\PaginatorBundle\Twig\Runtime\PageExtensionRuntime;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;

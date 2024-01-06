@@ -21,7 +21,6 @@ namespace Mazarini\PaginatorBundle\Page;
 
 class NextPage extends NavPage
 {
-
     public function getNumber(): int
     {
         return min($this->getParent()->getLastPage(), $this->getParent()->getCurrentPage() + 1);

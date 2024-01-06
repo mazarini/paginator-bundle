@@ -28,10 +28,10 @@ abstract class AbstractPage
     abstract public function getNumber(): int;
 
     abstract public function getLabel(): string;
+
     abstract public function isCurrent(): bool;
 
     abstract public function isDisable(): bool;
-
 
     protected function getParent(): PageCollectionInterface
     {

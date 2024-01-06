@@ -36,11 +36,11 @@ class PageExtensionRuntime implements RuntimeExtensionInterface
         $class = $this->classCommon;
 
         if ($page->isCurrent()) {
-            $class .= ' ' . $this->classCurrent;
+            $class .= ' '.$this->classCurrent;
         }
 
         if ($page->isDisable()) {
-            $class .= ' ' . $this->classDisable;
+            $class .= ' '.$this->classDisable;
         }
 
         return $class;

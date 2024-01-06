@@ -33,3 +33,11 @@ cover: init-test
 
 init-test:
 	cp var/database/empty.db var/database/dev.db
+
+#####################
+#  D A T A B A S E  #
+#####################
+database:
+	cp var/database/empty.db  var/database/dev.db
+	bin/console doctrine:migration:migrate --quiet
+	bin/console doctrine:fixture:load --quiet

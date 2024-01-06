@@ -24,17 +24,17 @@ use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class PageController extends AbstractController
 {
-    private bool $displayPreviousNext;
-    private bool $displayOnePage;
-    private int $allPagesLimit;
-    private int $pagesNumberCount;
-    private int $itemsPerPage;
+    protected bool $displayPreviousNext;
+    protected bool $displayOnePage;
+    protected int $allPagesLimit;
+    protected int $pagesNumberCount;
+    protected int $itemsPerPage;
     protected ?EntityInterface $parent = null;
     protected string $listTemplate;
+
     public function pageAction(PageRepository $articleRepository, PagerBuilder $pagerBuilder, int $currentPage = null): Response
     {
         $pages = $pagerBuilder->CreatePager($currentPage);

@@ -19,8 +19,6 @@
 
 namespace Mazarini\PaginatorBundle\Pager;
 
-use Mazarini\PaginatorBundle\Page\PageBuilder;
-
 abstract class PageConfig extends PageArray
 {
     public function __construct(
@@ -45,7 +43,6 @@ abstract class PageConfig extends PageArray
         return $this;
     }
 
-
     public function getDisplayOnePage(): bool
     {
         return $this->displayOnePage;
@@ -57,7 +54,6 @@ abstract class PageConfig extends PageArray
 
         return $this;
     }
-
 
     public function getAllPagesLimit(): int
     {

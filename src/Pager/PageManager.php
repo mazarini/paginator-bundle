@@ -38,7 +38,6 @@ abstract class PageManager extends PageConfig implements PageCollectionInterface
         int $allPagesLimit,
         int $pagesNumberCount,
         int $itemsPerPage
-
     ) {
         parent::__construct(
             $displayPreviousNext,
@@ -97,6 +96,7 @@ abstract class PageManager extends PageConfig implements PageCollectionInterface
     {
         return $this->getCurrentPage() <= $this->getLastPage();
     }
+
     /**
      * Get the value of criterias.
      */

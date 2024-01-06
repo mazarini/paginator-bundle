@@ -19,12 +19,6 @@
 
 namespace Mazarini\PaginatorBundle\Page;
 
-use Mazarini\PaginatorBundle\Page\CurrentPage;
-use Mazarini\PaginatorBundle\Page\FirstPage;
-use Mazarini\PaginatorBundle\Page\LastPage;
-use Mazarini\PaginatorBundle\Page\NextPage;
-use Mazarini\PaginatorBundle\Page\NumberPage;
-use Mazarini\PaginatorBundle\Page\PreviousPage;
 
 class PageBuilder
 {
@@ -33,25 +27,29 @@ class PageBuilder
         private string $previousPageLabel,
         private string $nextPageLabel,
         private string $lastPageLabel
-
     ) {
     }
+
     public function CreateFirstPage(): FirstPage
     {
         return new FirstPage($this->firstPageLabel);
     }
+
     public function CreatePreviousPage(): PreviousPage
     {
         return new PreviousPage($this->previousPageLabel);
     }
+
     public function CreateNumberPage(int $page): NumberPage
     {
         return new NumberPage($page);
     }
+
     public function CreateNextPage(): NextPage
     {
         return new NextPage($this->nextPageLabel);
     }
+
     public function CreateLastPage(): LastPage
     {
         return new LastPage($this->lastPageLabel);

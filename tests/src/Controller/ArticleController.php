@@ -17,12 +17,22 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Page;
+namespace App\Controller;
 
-class LastPage extends NavPage
+use App\Entity\Category;
+use App\Repository\ArticleRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route('/category/article')]
+class ArticleController extends AbstractController
 {
-    public function getNumber(): int
+    #[Route('/{id}', name: 'app_article_index', methods: ['GET'])]
+    public function index(ArticleRepository $articleRepository, Category $category): Response
     {
-        return $this->getParent()->getLastPage();
+        return $this->render('article/index.html.twig', [
+            'articles' => $articleRepository->findAll(),
+        ]);
     }
 }
