@@ -16,12 +16,11 @@
     <tbody>
         {% for i in 0..6 %}
         <tr>
-            <td>{{ cases[i] }}</td>
+            <th>{{ cases[i] }}</th>
             {% for pages in tests %}
-                {% for page in pages %}{% endfor %}
-            <td>{{ page_class(pages[i]) }}</td>
-            <td>{{ pages[i].label|raw }}</td>
-            <td>{{ pages[i].number }}</td>
+                <td>{{ page_class(pages[i]) }}</td>
+                <td>{{ pages[i].label|raw }}</td>
+                <td>{{ pages[i].number }}</td>
             {% endfor %}
         </tr>
         {% endfor %}

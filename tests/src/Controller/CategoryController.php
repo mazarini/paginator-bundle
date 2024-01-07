@@ -32,6 +32,9 @@ class CategoryController extends PageController
     protected bool $displayOnePage = false;
     protected string $listTemplate = 'category/index.html.twig';
 
+    /**
+     * @var array<string,'ASC'|'DESC'>
+     */
     protected array $orderBy = ['label' => 'ASC'];
 
     #[Route('/', name: 'app_category_page', methods: ['GET'])]

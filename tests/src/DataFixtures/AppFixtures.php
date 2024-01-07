@@ -40,17 +40,17 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function loadCategory(int $i)
+    private function loadCategory(int $i): void
     {
         $category = new Category();
         $category->setLabel(sprintf('Category %s', $i));
-        for ($j = 1; $j < 10 * $i; ++$j) {
+        for ($j = 1; $j < 15 * $i; ++$j) {
             $this->loadArticle($category, $i, $j);
         }
         $this->manager->persist($category);
     }
 
-    private function loadArticle(Category $category, int $i, int $j)
+    private function loadArticle(Category $category, int $i, int $j): void
     {
         $article = new Article();
         $article->setLabel(sprintf('Article %s / %04s', $i, $j));

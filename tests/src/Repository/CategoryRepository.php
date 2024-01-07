@@ -20,14 +20,11 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Mazarini\PaginatorBundle\Entity\EntityInterface;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
 
 /**
- * @extends ServiceEntityRepository<Category>
- *
  * @method Category|null find($id, $lockMode = null, $lockVersion = null)
  * @method Category|null findOneBy(array $criteria, array $orderBy = null)
  * @method Category[]    findAll()
@@ -40,7 +37,12 @@ class CategoryRepository extends PageRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function getNew(?EntityInterface $parent): EntityInterface
+    /**
+     * getNew.
+     *
+     * @param null|null $parent
+     */
+    public function getNew(mixed $parent = null): EntityInterface
     {
         return new Category();
     }

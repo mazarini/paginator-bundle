@@ -36,7 +36,12 @@ abstract class PageRepository extends ServiceEntityRepository
         return parent::count($criteria);
     }
 
-    abstract public function getNew(?EntityInterface $parent): EntityInterface;
+    /**
+     * getNew.
+     *
+     * @param ?EntityInterface $parent
+     */
+    abstract public function getNew(mixed $parent): EntityInterface;
 
     /**
      * getPageData.
