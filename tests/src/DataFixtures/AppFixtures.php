@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
     {
         $category = new Category();
         $category->setLabel(sprintf('Category %02s', $i));
-        for ($j = 1; $j < 10 * $i; ++$j) {
+        for ($j = 1; $j < 15 * $i; ++$j) {
             $this->loadArticle($category, $i, $j);
         }
         $this->manager->persist($category);
