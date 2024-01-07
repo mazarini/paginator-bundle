@@ -21,7 +21,7 @@ namespace Mazarini\PaginatorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-class Entity
+class Entity implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

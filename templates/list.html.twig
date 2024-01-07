@@ -1,0 +1,25 @@
+    <table class="table">
+        <thead>
+            <tr>
+                {% block title %}{% endblock %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                {% block data %}{% endblock %}
+                {% if action > 0 %}
+                <td>
+                    {% block action %}
+                    <a href="{% block action_href %}{% endblock %}">Show</a>
+                    {% endblock %}
+                </td>
+                {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="{{ data + action }}">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>

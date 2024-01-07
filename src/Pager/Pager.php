@@ -42,30 +42,33 @@ class Pager extends PageManager
         );
     }
 
+    public function isPagesDisplay(): bool
+    {
+        return $this->getDisplayOnePage() || $this->getLastPage() > 1;
+    }
+
     protected function buildPager(): void
     {
-        if ($this->getDisplayOnePage() || 1 < $this->getLastPage()) {
-            if ($this->getAllPagesLimit() > $this->getLastPage()) {
-                $this[] = $this->pageBuilder->CreateFirstPage();
-                if ($this->getDisplayPreviousNext()) {
-                    $this[] = $this->pageBuilder->CreatePreviousPage();
-                }
-                $start = max(1, $this->getCurrentPage() - (int) (($this->getPagesNumberCount() - 1) / 2));
-                $end = min($start + $this->getPagesNumberCount() - 1, $this->getLastPage());
-                $start = max(1, $end - $this->getPagesNumberCount() + 1);
-            } else {
-                $start = 1;
-                $end = $this->getLastPage();
+        if ($this->getAllPagesLimit() < $this->getLastPage()) {
+            $this[] = $this->pageBuilder->CreateFirstPage();
+            if ($this->getDisplayPreviousNext()) {
+                $this[] = $this->pageBuilder->CreatePreviousPage();
             }
-            for ($i = $start; $i <= $end; ++$i) {
-                $this[] = $this->pageBuilder->CreateNumberPage($i);
+            $start = max(1, $this->getCurrentPage() - (int) (($this->getPagesNumberCount() - 1) / 2));
+            $end = min($start + $this->getPagesNumberCount() - 1, $this->getLastPage());
+            $start = max(1, $end - $this->getPagesNumberCount() + 1);
+        } else {
+            $start = 1;
+            $end = $this->getLastPage();
+        }
+        for ($i = $start; $i <= $end; ++$i) {
+            $this[] = $this->pageBuilder->CreateNumberPage($i);
+        }
+        if ($this->getAllPagesLimit() < $this->getLastPage()) {
+            if ($this->getDisplayPreviousNext()) {
+                $this[] = $this->pageBuilder->CreateNextPage();
             }
-            if ($this->getAllPagesLimit() > $this->getLastPage()) {
-                if ($this->getDisplayPreviousNext()) {
-                    $this[] = $this->pageBuilder->CreateNextPage();
-                }
-                $this[] = $this->pageBuilder->CreateLastPage();
-            }
+            $this[] = $this->pageBuilder->CreateLastPage();
         }
     }
 }

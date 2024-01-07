@@ -20,8 +20,11 @@
 namespace App\Repository;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Mazarini\PaginatorBundle\Entity\EntityInterface;
+use Mazarini\PaginatorBundle\Repository\PageRepository;
 
 /**
  * @extends ServiceEntityRepository<Article>
@@ -31,13 +34,26 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Article[]    findAll()
  * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ArticleRepository extends ServiceEntityRepository
+class ArticleRepository extends PageRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Article::class);
     }
 
+    /**
+     * getNew.
+     *
+     * @param Category $parent
+     *
+     * @return Article
+     */
+    public function getNew(?EntityInterface $parent): EntityInterface
+    {
+        $article = new Article();
+
+        return $article->setCategory($parent);
+    }
     //    /**
     //     * @return Article[] Returns an array of Article objects
     //     */

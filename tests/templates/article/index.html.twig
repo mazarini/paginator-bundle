@@ -3,31 +3,24 @@
 {% block title %}Article index{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
+    <h1>Article of {{ parent.label }}</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Label</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.label }}</td>
-                <td>
-                    <a href="{{ path('app_article_index', {'id': article.category.id}) }}">show</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% embed '@MazariniPaginator/list.html.twig' with {'pages': pages, 'entities': entities, 'data': 3, 'action': 0} only %}
+
+        {% block title %}
+            <th>Id</th>
+            <th>Label</th>
+        {% endblock %}
+
+        {% block data %}
+            <td>{{ entity.id }}</td>
+            <td>{{ entity.label }}</td>
+        {% endblock %}
+
+    {% endembed %}
+
+    {% embed '@MazariniPaginator/pages.html.twig' with {'pages': pages, 'parent': parent} only %}
+        {% block href %}{{ path('app_article_page', {'id': parent.id, 'page': page.number}) }}{% endblock %}
+    {% endembed %}
 
 {% endblock %}

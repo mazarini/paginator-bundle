@@ -21,18 +21,34 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Repository\ArticleRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Mazarini\PaginatorBundle\Controller\PageController;
+use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/category/article')]
-class ArticleController extends AbstractController
+#[Route('/category')]
+class ArticleController extends PageController
 {
-    #[Route('/{id}', name: 'app_article_index', methods: ['GET'])]
-    public function index(ArticleRepository $articleRepository, Category $category): Response
+    protected string $listTemplate = 'article/index.html.twig';
+
+    protected array $orderBy = ['label' => 'ASC'];
+
+    #[Route('/{id}/article/{page}', name: 'app_article_page', methods: ['GET'])]
+    public function index(PagerBuilder $pagerBuilder, ArticleRepository $articleRepository, Category $category, int $page = null): Response
     {
-        return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
-        ]);
+        $this->parent = $category;
+        if (null === $page) {
+            return $this->redirectToPage(1);
+        }
+        $this->parent = $category;
+        $this->criterias = ['Category' => $category];
+
+        return $this->pageAction($articleRepository, $pagerBuilder, $page);
+    }
+
+    protected function redirectToPage(int $page): RedirectResponse
+    {
+        return $this->redirectToRoute('app_article_page', ['id' => $this->parent->getId(), 'page' => $page]);
     }
 }

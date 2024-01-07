@@ -38,7 +38,7 @@ class HomeController extends AbstractController
         $currentPage = 1;
         foreach ([1, 3, 7] as $currentPage) {
             $tests[$currentPage] = $pagerBuilder->CreatePager($currentPage)
-                ->setAllPagesLimit(10)
+                ->setAllPagesLimit(6)
                 ->setDisplayPreviousNext(true)
             ;
             $tests[$currentPage]->setCount(70);

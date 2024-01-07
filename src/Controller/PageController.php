@@ -32,6 +32,8 @@ abstract class PageController extends AbstractController
     protected int $allPagesLimit;
     protected int $pagesNumberCount;
     protected int $itemsPerPage;
+    protected array $orderBy;
+    protected array $criterias;
     protected ?EntityInterface $parent = null;
     protected string $listTemplate;
 
@@ -53,6 +55,13 @@ abstract class PageController extends AbstractController
         if (isset($this->itemsPerPage)) {
             $pages->setItemsPerPage($this->itemsPerPage);
         }
+        if (isset($this->orderBy)) {
+            $pages->setOrderBy($this->orderBy);
+        }
+        if (isset($this->criterias)) {
+            $pages->setCriterias($this->criterias);
+        }
+
         $entities = $articleRepository->getPageData($pages);
         if (!$pages->isPageCurrentOK()) {
             return $this->redirectToPage(1);

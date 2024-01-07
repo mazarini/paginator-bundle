@@ -20,18 +20,28 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Mazarini\PaginatorBundle\Controller\PageController;
+use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/category')]
-class CategoryController extends AbstractController
+class CategoryController extends PageController
 {
+    protected bool $displayOnePage = false;
+    protected string $listTemplate = 'category/index.html.twig';
+
+    protected array $orderBy = ['label' => 'ASC'];
+
     #[Route('/', name: 'app_category_page', methods: ['GET'])]
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(PagerBuilder $pagerBuilder, CategoryRepository $categoryRepository): Response
     {
-        return $this->render('category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-        ]);
+        return $this->pageAction($categoryRepository, $pagerBuilder);
+    }
+
+    protected function redirectToPage(int $page): RedirectResponse
+    {
+        return $this->redirectToRoute('app_category_page');
     }
 }

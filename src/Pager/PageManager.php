@@ -146,7 +146,7 @@ abstract class PageManager extends PageConfig implements PageCollectionInterface
 
     public function getLimit(): ?int
     {
-        return 1 === $this->getCurrentPage() ? null : $this->getItemsPerPage();
+        return 1 === $this->getLastPage() ? null : $this->getItemsPerPage();
     }
 
     public function getOffset(): int
