@@ -32,7 +32,8 @@ cover: init-test
 	bin/phpunit --coverage-html var/coverage
 
 init-test:
-	cp var/database/empty.db var/database/dev.db
+	cp var/database/empty.db var/database/test.db
+	bin/console doctrine:migration:migrate --quiet --env=test
 
 #####################
 #  D A T A B A S E  #

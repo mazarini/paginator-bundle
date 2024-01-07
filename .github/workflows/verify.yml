@@ -49,9 +49,12 @@ jobs:
           composer update --no-ansi --no-interaction --no-scripts --no-progress
           composer global require phpstan/phpstan-symfony
           composer global require friendsofphp/php-cs-fixer
+          composer global require friendsoftwig/twigcs
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: make cover-text
       - name: Execute phpstan
-        run: php ~/.composer/vendor/bin/phpstan
+        run: make phpstan
+      - name: Execute twigcs
+        run: make twigcs
       - name: Execute php-cs-fixer
-        run: php ~/.composer/vendor/bin/php-cs-fixer fix
+        run: make phpcs
