@@ -32,9 +32,15 @@ abstract class PageController extends AbstractController
     protected int $allPagesLimit;
     protected int $pagesNumberCount;
     protected int $itemsPerPage;
+    /**
+     * @var array<string,'ASC'|'DESC'>
+     */
     protected array $orderBy;
+    /**
+     * @var array<string,mixed>
+     */
     protected array $criterias;
-    protected ?EntityInterface $parent = null;
+    protected EntityInterface $parent;
     protected string $listTemplate;
 
     public function pageAction(PageRepository $articleRepository, PagerBuilder $pagerBuilder, int $currentPage = null): Response
@@ -68,7 +74,7 @@ abstract class PageController extends AbstractController
         }
 
         return $this->render($this->listTemplate, [
-            'parent' => $this->parent,
+            'parent' => $this->parent ?? null,
             'pages' => $pages,
             'entities' => $entities,
         ]);

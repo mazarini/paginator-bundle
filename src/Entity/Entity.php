@@ -28,15 +28,17 @@ class Entity implements EntityInterface
     #[ORM\Column]
     protected ?int $id = null;
 
+    /**
+     * getId, return 0 if null.
+     */
     public function getId(): int
     {
-        if (null === $this->id) {
-            return 0;
-        }
-
-        return $this->id;
+        return $this->id ?? 0;
     }
 
+    /**
+     * isNew, tell if entity do not exists in database.
+     */
     public function isNew(): bool
     {
         return 0 === $this->getId();

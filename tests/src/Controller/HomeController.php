@@ -41,7 +41,8 @@ class HomeController extends AbstractController
                 ->setAllPagesLimit(6)
                 ->setDisplayPreviousNext(true)
             ;
-            $tests[$currentPage]->setCount(70);
+            $tests[$currentPage]->setLastPage(7);
+            $tests[$currentPage]->count();
         }
         $cases = ['first', 'previous', 1, 3, 7, 'next', 'last'];
 

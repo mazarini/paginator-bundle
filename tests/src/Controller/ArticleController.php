@@ -31,7 +31,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends PageController
 {
     protected string $listTemplate = 'article/index.html.twig';
-
+    /**
+     * @var array<string,'ASC'|'DESC'>
+     */
     protected array $orderBy = ['label' => 'ASC'];
 
     #[Route('/{id}/article/{page}', name: 'app_article_page', methods: ['GET'])]

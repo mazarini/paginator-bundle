@@ -31,6 +31,9 @@ class Category extends Entity
     #[ORM\Column(length: 31)]
     private string $label = '';
 
+    /**
+     * @var Collection<int,Article> $articles
+     */
     #[ORM\OneToMany(mappedBy: 'Category', targetEntity: Article::class)]
     private Collection $articles;
 

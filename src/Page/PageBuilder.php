@@ -19,7 +19,6 @@
 
 namespace Mazarini\PaginatorBundle\Page;
 
-
 class PageBuilder
 {
     public function __construct(

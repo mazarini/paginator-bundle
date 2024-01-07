@@ -32,25 +32,25 @@ class AppFixtures extends Fixture
     {
         $this->manager = $manager;
         $category = new Category();
-        $category->setLabel('Category 5 test tri');
+        $category->setLabel('Category 05 test tri');
         $this->manager->persist($category);
-        for ($i = 1; $i < 10; ++$i) {
+        for ($i = 1; $i < 15; ++$i) {
             $this->loadCategory($i);
         }
         $manager->flush();
     }
 
-    private function loadCategory(int $i)
+    private function loadCategory(int $i): void
     {
         $category = new Category();
-        $category->setLabel(sprintf('Category %s', $i));
+        $category->setLabel(sprintf('Category %02s', $i));
         for ($j = 1; $j < 10 * $i; ++$j) {
             $this->loadArticle($category, $i, $j);
         }
         $this->manager->persist($category);
     }
 
-    private function loadArticle(Category $category, int $i, int $j)
+    private function loadArticle(Category $category, int $i, int $j): void
     {
         $article = new Article();
         $article->setLabel(sprintf('Article %s / %04s', $i, $j));
