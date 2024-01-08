@@ -67,7 +67,7 @@ abstract class PageManager extends PageConfig implements PageCollectionInterface
     /**
      * Set the value of lastPage.
      */
-    public function setLastPage(int $lastPage): self
+    public function setLastPage(int $lastPage): static
     {
         if (null === $this->currentPage) {
             $this->lastPage = 1;
@@ -81,7 +81,7 @@ abstract class PageManager extends PageConfig implements PageCollectionInterface
     /**
      * Set the value of Count.
      */
-    public function setCount(int $count): self
+    public function setCount(int $count): static
     {
         if (0 === $count || null === $this->currentPage) {
             $this->lastPage = 1;

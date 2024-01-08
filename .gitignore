@@ -4,6 +4,8 @@
 /src/Kernel.php
 /var/*
 !var/database
+/var/database/*
+/var/database/empty.db
 ###< local ###
 
 
