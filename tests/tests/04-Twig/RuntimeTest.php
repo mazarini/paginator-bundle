@@ -20,6 +20,10 @@
 namespace App\Tests\Pager;
 
 use Mazarini\PaginatorBundle\Page\FirstPage;
+use Mazarini\PaginatorBundle\Page\LastPage;
+use Mazarini\PaginatorBundle\Page\NextPage;
+use Mazarini\PaginatorBundle\Page\NumberPage;
+use Mazarini\PaginatorBundle\Page\PreviousPage;
 use Mazarini\PaginatorBundle\Pager\Pager;
 use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Mazarini\PaginatorBundle\Twig\Runtime\PageExtensionRuntime;
@@ -47,12 +51,14 @@ class RuntimeTest extends KernelTestCase
 
         $this->assertInstanceOf(FirstPage::class, $pages[0]);
         $this->assertSame('common disable', $runtime->getPageClass($pages[0]));
-        $this->assertInstanceOf(FirstPage::class, $pages[1]);
+        $this->assertInstanceOf(PreviousPage::class, $pages[1]);
         $this->assertSame('common disable', $runtime->getPageClass($pages[1]));
-        $this->assertInstanceOf(FirstPage::class, $pages[2]);
+        $this->assertInstanceOf(NumberPage::class, $pages[2]);
         $this->assertSame('common current', $runtime->getPageClass($pages[2]));
-        $this->assertInstanceOf(FirstPage::class, $pages[3]);
-        $this->assertSame('common', $runtime->getPageClass($pages[3]));
+        $this->assertInstanceOf(NextPage::class, $pages[5]);
+        $this->assertSame('common', $runtime->getPageClass($pages[5]));
+        $this->assertInstanceOf(LastPage::class, $pages[6]);
+        $this->assertSame('common', $runtime->getPageClass($pages[6]));
     }
 
     private function getPager(int $curentPage): Pager
