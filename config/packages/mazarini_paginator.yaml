@@ -1,6 +1,6 @@
 mazarini_paginator:
     pager:
-        display_previous_next: false
+        display_previous_next: true
         display_one_page: false
         all_pages_limit: 9
         pages_number_count: 3

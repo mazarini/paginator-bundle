@@ -42,3 +42,4 @@ database:
 	cp var/database/empty.db  var/database/dev.db
 	bin/console doctrine:migration:migrate --quiet
 	bin/console doctrine:fixture:load --quiet
+	console cache:clear --env=test

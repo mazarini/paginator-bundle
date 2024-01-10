@@ -19,50 +19,37 @@
 
 namespace App\Tests\Pager;
 
+use Mazarini\PaginatorBundle\Page\NumberPage;
+use Mazarini\PaginatorBundle\Pager\Pager;
 use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class PagerTest extends KernelTestCase
+class ArratTest extends KernelTestCase
 {
     private PagerBuilder $pagerBuilder;
 
     protected function setup(): void
     {
-        $pagerBuilder = $this->getContainer()->get(PagerBuilder::class);
+        $kernel = static::bootKernel();
+        $pagerBuilder = $kernel->getContainer()->get(PagerBuilder::class);
         if ($pagerBuilder instanceof PagerBuilder) {
             $this->pagerBuilder = $pagerBuilder;
         }
     }
 
-    public function testNoPages(): void
+    public function testAppend(): void
     {
-        $pages = $this->pagerBuilder->createPager();
-
-        $this->assertSame(1, $pages->getCurrentPage());
-        $this->assertSame(1, $pages->getLastPage());
-
-        $pages->setLastPage(2);
-        $this->assertSame(1, $pages->getLastPage());
-
-        $pages->setCount(99);
-        $this->assertSame(1, $pages->getLastPage());
+        $pages = $this->getPager(1)
+            ->setLastPage(9);
+        $pages->append(new NumberPage(2));
+        foreach ($pages as $page) {
+            $this->assertSame($page->getNumber(), 2);
+        }
+        $this->assertCount(1, $pages);
     }
 
-    public function testPages(): void
+    private function getPager(int $curentPage): Pager
     {
-        $pages = $this->pagerBuilder->createPager(2);
-        $pages->setItemsPerPage(10);
-
-        $pages->setCount(0);
-        $this->assertSame(1, $pages->getLastPage());
-
-        $pages->setCount(1);
-        $this->assertSame(1, $pages->getLastPage());
-
-        $pages->setCount(10);
-        $this->assertSame(1, $pages->getLastPage());
-
-        $pages->setCount(11);
-        $this->assertSame(2, $pages->getLastPage());
+        return $this->pagerBuilder->CreatePager($curentPage);
     }
 }

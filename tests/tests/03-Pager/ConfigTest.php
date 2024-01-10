@@ -28,7 +28,8 @@ class ConfigTest extends KernelTestCase
 
     protected function setup(): void
     {
-        $pagerBuilder = $this->getContainer()->get(PagerBuilder::class);
+        $kernel = static::bootKernel();
+        $pagerBuilder = $kernel->getContainer()->get(PagerBuilder::class);
         if ($pagerBuilder instanceof PagerBuilder) {
             $this->pagerBuilder = $pagerBuilder;
         }
@@ -37,8 +38,8 @@ class ConfigTest extends KernelTestCase
     public function testDisplayPreviousNext(): void
     {
         $pages = $this->pagerBuilder->createPager();
-
         $this->assertTrue($pages->getDisplayPreviousNext());
+
         $pages->setDisplayPreviousNext(false);
         $this->assertFalse($pages->getDisplayPreviousNext());
     }
@@ -46,15 +47,16 @@ class ConfigTest extends KernelTestCase
     public function testDisplayOnePage(): void
     {
         $pages = $this->pagerBuilder->createPager();
-
-        $this->assertTrue($pages->getDisplayOnePage());
-        $pages->setDisplayOnePage(false);
         $this->assertFalse($pages->getDisplayOnePage());
+
+        $pages->setDisplayOnePage(true);
+        $this->assertTrue($pages->getDisplayOnePage());
     }
 
     public function testAllPagesLimit(): void
     {
         $pages = $this->pagerBuilder->createPager();
+        $this->assertSame(9, $pages->getAllPagesLimit());
 
         $pages->setAllPagesLimit(3);
         $this->assertSame(3, $pages->getAllPagesLimit());
@@ -63,6 +65,7 @@ class ConfigTest extends KernelTestCase
     public function testPagesNumberCount(): void
     {
         $pages = $this->pagerBuilder->createPager();
+        $this->assertSame(3, $pages->getPagesNumberCount());
 
         $pages->setPagesNumberCount(6);
         $this->assertSame(7, $pages->getPagesNumberCount());
@@ -71,6 +74,7 @@ class ConfigTest extends KernelTestCase
     public function testItemsPerPage(): void
     {
         $pages = $this->pagerBuilder->createPager();
+        $this->assertSame(10, $pages->getItemsPerPage());
 
         $pages->setItemsPerPage(5);
         $this->assertSame(5, $pages->getItemsPerPage());
