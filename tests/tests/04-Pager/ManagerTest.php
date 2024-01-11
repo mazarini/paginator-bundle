@@ -37,7 +37,8 @@ class ManagerTest extends KernelTestCase
 
     public function testNullCurrent(): void
     {
-        $pages = $this->pagerBuilder->createPager();
+        $pages = $this->pagerBuilder->createPager()
+            ->setDisplayOnePage(false);
         $this->assertSame(1, $pages->getLastPage());
         $this->assertFalse($pages->isPagesDisplay());
         $this->assertSame(1, $pages->getLastPage());
