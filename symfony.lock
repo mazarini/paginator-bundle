@@ -38,6 +38,9 @@
             "migrations/.gitignore"
         ]
     },
+    "mazarini/message-bundle": {
+        "version": "dev-master"
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {

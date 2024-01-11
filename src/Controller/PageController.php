@@ -19,6 +19,7 @@
 
 namespace Mazarini\PaginatorBundle\Controller;
 
+use Mazarini\MessageBundle\Controller\MessageControllerTrait;
 use Mazarini\PaginatorBundle\Entity\EntityInterface;
 use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class PageController extends AbstractController
 {
+    use MessageControllerTrait;
     protected bool $displayPreviousNext;
     protected bool $displayOnePage;
     protected int $allPagesLimit;
@@ -70,6 +72,8 @@ abstract class PageController extends AbstractController
 
         $entities = $articleRepository->getPageData($pages);
         if (!$pages->isPageCurrentOK()) {
+            $this->addFlash('info', sprintf('The page "%s" does not exist', $currentPage));
+
             return $this->redirectToPage(1);
         }
 

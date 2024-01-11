@@ -18,6 +18,7 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.17",
+        "mazarini/message-bundle": "dev-master",
         "symfony/console": "^6.3|^7.0",
         "symfony/flex": "^2.4",
         "symfony/form": "^6.3|^7.0",
@@ -81,5 +82,18 @@
             "symfony/runtime": true
         },
         "sort-packages": true
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mazarini/message-bundle.git"
+        },
+        {
+            "type": "path",
+            "url": "../*",
+            "options": {
+                "reference": "config"
+            }
+        }
+    ]
 }

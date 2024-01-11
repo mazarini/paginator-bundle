@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93773ab6a11eee43cf74462293b01400",
+    "content-hash": "9a0da30ec226f3e4327f3bd2ebf7dd0e",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -1328,6 +1328,87 @@
                 "source": "https://github.com/doctrine/sql-formatter/tree/1.1.3"
             },
             "time": "2022-05-23T21:33:49+00:00"
+        },
+        {
+            "name": "mazarini/message-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mazarini/message-bundle.git",
+                "reference": "81f670ec3af5c9b65ba8d64e66ae3eae5bb86f8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mazarini/message-bundle/zipball/81f670ec3af5c9b65ba8d64e66ae3eae5bb86f8e",
+                "reference": "81f670ec3af5c9b65ba8d64e66ae3eae5bb86f8e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-iconv": "*",
+                "php": ">=8.1",
+                "symfony/console": "^6.3|^7.0",
+                "symfony/framework-bundle": "^6.3|^7.0",
+                "symfony/runtime": "^6.3|^7.0",
+                "symfony/twig-bundle": "^6.3|^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "symfony/browser-kit": "^6.3|^7.0",
+                "symfony/css-selector": "^6.3|^7.0",
+                "symfony/dotenv": "^6.3|^7.0",
+                "symfony/flex": "^2.4",
+                "symfony/maker-bundle": "^1.50",
+                "symfony/phpunit-bridge": "^6.3|^7.0",
+                "symfony/yaml": "^6.3|^7.0"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": false,
+                    "docker": false
+                },
+                "public-dir": "tests/public"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mazarini\\MessageBundle\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Mazarini\\MessageBundle\\Tests\\": "tests/tests",
+                    "App\\": "tests/src/"
+                }
+            },
+            "scripts": {
+                "auto-scripts": {
+                    "cache:clear": "symfony-cmd",
+                    "assets:install %PUBLIC_DIR%": "symfony-cmd"
+                },
+                "post-install-cmd": [
+                    "@auto-scripts"
+                ],
+                "post-update-cmd": [
+                    "@auto-scripts"
+                ]
+            },
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Mazarini",
+                    "email": "mazarini@protonmail.com"
+                }
+            ],
+            "description": "Display alerts on webpage.",
+            "support": {
+                "source": "https://github.com/mazarini/message-bundle/tree/master",
+                "issues": "https://github.com/mazarini/message-bundle/issues"
+            },
+            "time": "2023-12-20T21:55:05+00:00"
         },
         {
             "name": "psr/cache",
