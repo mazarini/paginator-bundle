@@ -43,4 +43,9 @@ class Entity implements EntityInterface
     {
         return 0 === $this->getId();
     }
+
+    public function getEntityId(): string
+    {
+        return sprintf('%s-%s', strtolower((new \ReflectionClass($this))->getShortName()), $this->getId());
+    }
 }

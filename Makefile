@@ -33,13 +33,14 @@ cover: init-test
 
 init-test:
 	cp var/database/empty.db var/database/test.db
-	bin/console doctrine:migration:migrate --quiet --env=test
 
 #####################
 #  D A T A B A S E  #
 #####################
 database:
-	cp var/database/empty.db  var/database/dev.db
+	touch var/database/dev.db
+	rm var/database/dev.db
+	touch var/database/dev.db
 	bin/console doctrine:migration:migrate --quiet
+	cp var/database/dev.db  var/database/empty.db
 	bin/console doctrine:fixture:load --quiet
-	console cache:clear --env=test

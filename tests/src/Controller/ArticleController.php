@@ -35,8 +35,9 @@ class ArticleController extends PageController
      * @var array<string,'ASC'|'DESC'>
      */
     protected array $orderBy = ['label' => 'ASC'];
+    protected bool $displayOnePage = true;
 
-    #[Route('/{id}/article/{page}', name: 'app_article_page', methods: ['GET'])]
+    #[Route('/{id}/article/page-{page}.html', name: 'app_article_page', methods: ['GET'])]
     public function index(PagerBuilder $pagerBuilder, ArticleRepository $articleRepository, Category $category, int $page = null): Response
     {
         $this->parent = $category;

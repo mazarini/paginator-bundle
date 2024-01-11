@@ -24,4 +24,6 @@ interface EntityInterface
     public function getId(): int;
 
     public function isNew(): bool;
+
+    public function getEntityId(): string;
 }

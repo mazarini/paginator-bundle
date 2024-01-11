@@ -19,7 +19,7 @@
         {% endblock %}
 
         {% block action_href %}
-            {{ path('app_article_page', {'id': entity.id}) }}
+            {{ path('app_article_page', {'id': entity.id, 'page': 1}) }}
         {% endblock %}
 
     {% endembed %}

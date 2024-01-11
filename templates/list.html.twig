@@ -6,9 +6,8 @@
         </thead>
         <tbody>
         {% for entity in entities %}
-            <tr>
+            <tr id="{{ entity.EntityId }}">
                 {% block data %}
-                    <td>{{ entity.id }}</td>
                 {% endblock %}
                 {% if action > 0 %}
                 <td>

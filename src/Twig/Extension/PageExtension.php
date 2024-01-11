@@ -25,11 +25,6 @@ use Twig\TwigFunction;
 
 class PageExtension extends AbstractExtension
 {
-    public function getFilters(): array
-    {
-        return [];
-    }
-
     public function getFunctions(): array
     {
         return [

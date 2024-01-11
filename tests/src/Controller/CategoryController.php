@@ -29,16 +29,25 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/category')]
 class CategoryController extends PageController
 {
-    protected bool $displayOnePage = false;
     protected string $listTemplate = 'category/index.html.twig';
+
+    protected bool $displayPreviousNext = true;
+
+    protected bool $displayOnePage = false;
+
+    protected int $allPagesLimit = 3;
+
+    protected int $pagesNumberCount = 9;
+
+    protected int $itemsPerPage = 10;
 
     /**
      * @var array<string,'ASC'|'DESC'>
      */
     protected array $orderBy = ['label' => 'ASC'];
 
-    #[Route('/', name: 'app_category_page', methods: ['GET'])]
-    public function index(PagerBuilder $pagerBuilder, CategoryRepository $categoryRepository): Response
+    #[Route('/index.html', name: 'app_category_page', methods: ['GET'])]
+    public function index(CategoryRepository $categoryRepository, PagerBuilder $pagerBuilder): Response
     {
         return $this->pageAction($categoryRepository, $pagerBuilder);
     }
