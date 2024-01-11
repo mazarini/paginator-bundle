@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2023 Mazarini <mazarini@protonmail.com>.
+ * Copyright (C) 2023-2024 Mazarini <mazarini@protonmail.com>.
  * This file is part of mazarini/paginator-bundle.
  *
  * mazarini/paginator-bundle is free software: you can redistribute it and/or

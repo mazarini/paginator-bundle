@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2023 Mazarini <mazarini@protonmail.com>.
+ * Copyright (C) 2023-2024 Mazarini <mazarini@protonmail.com>.
  * This file is part of mazarini/paginator-bundle.
  *
  * mazarini/paginator-bundle is free software: you can redistribute it and/or
@@ -19,13 +19,6 @@
 
 namespace App\Tests\Pager;
 
-use Mazarini\PaginatorBundle\Page\FirstPage;
-use Mazarini\PaginatorBundle\Page\LastPage;
-use Mazarini\PaginatorBundle\Page\NextPage;
-use Mazarini\PaginatorBundle\Page\NumberPage;
-use Mazarini\PaginatorBundle\Page\PreviousPage;
-use Mazarini\PaginatorBundle\Pager\Pager;
-use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Mazarini\PaginatorBundle\Twig\Extension\PageExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
