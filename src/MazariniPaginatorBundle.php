@@ -31,6 +31,30 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 class MazariniPaginatorBundle extends AbstractBundle
 {
     /**
+     * @var array<'pager'|'class'|'label',array<string,mixed>>
+     */
+    private static array $defaultConfig = [
+        'pager' => [
+            'display_previous_next' => true,
+            'display_one_page' => false,
+            'all_pages_limit' => 9,
+            'pages_number_count' => 3,
+            'per_page' => 10,
+        ],
+        'class' => [
+            'common' => 'page-item',
+            'current' => 'active',
+            'disable' => 'disabled',
+        ],
+        'label' => [
+            'first' => '<i class="bi bi-skip-start-fill"></i>',
+            'previous' => '<i class="bi bi-caret-left-fill"></i>',
+            'next' => '<i class="bi bi-caret-right-fill"></i>',
+            'last' => '<i class="bi bi-skip-end-fill"></i>',
+        ],
+    ];
+
+    /**
      * loadExtension.
      *
      * @param array<array<mixed>> $config
@@ -43,6 +67,9 @@ class MazariniPaginatorBundle extends AbstractBundle
             ->autowire()
             ->autoconfigure()
         ;
+        $config = array_merge(self::$defaultConfig, $config);
+        self::$defaultConfig = $config;
+
         $services->set(PageExtensionRuntime::class)
             ->arg('$classCommon', $config['class']['common'])
             ->arg('$classCurrent', $config['class']['current'])
@@ -79,30 +106,40 @@ class MazariniPaginatorBundle extends AbstractBundle
             ->children()
             ->arrayNode('pager')
             ->children()
-            ->booleanNode('display_previous_next')->defaultValue(false)->end()
-            ->booleanNode('display_one_page')->defaultValue(false)->end()
-            ->integerNode('all_pages_limit')->defaultValue(9)->end()
-            ->integerNode('pages_number_count')->defaultValue(3)->end()
-            ->integerNode('per_page')->defaultValue(10)->end()
+            ->booleanNode('display_previous_next')->defaultValue(self::$defaultConfig['pager']['display_previous_next'])->end()
+            ->booleanNode('display_one_page')->defaultValue(self::$defaultConfig['pager']['display_one_page'])->end()
+            ->integerNode('all_pages_limit')->defaultValue(self::$defaultConfig['pager']['all_pages_limit'])->end()
+            ->integerNode('pages_number_count')->defaultValue(self::$defaultConfig['pager']['pages_number_count'])->end()
+            ->integerNode('per_page')->defaultValue(self::$defaultConfig['pager']['per_page'])->end()
             ->end()
             ->end()
             ->arrayNode('class')
             ->children()
-            ->scalarNode('common')->defaultValue('page-item')->end()
-            ->scalarNode('current')->defaultValue('active')->end()
-            ->scalarNode('disable')->defaultValue('disabled')->end()
+            ->scalarNode('common')->defaultValue(self::$defaultConfig['class']['common'])->end()
+            ->scalarNode('current')->defaultValue(self::$defaultConfig['class']['current'])->end()
+            ->scalarNode('disable')->defaultValue(self::$defaultConfig['class']['disable'])->end()
             ->end()
             ->end()
             ->arrayNode('label')
             ->children()
-            ->scalarNode('first')->defaultValue('<i class="bi bi-skip-start-fill"></i>')->end()
-            ->scalarNode('previous')->defaultValue('<i class="bi bi-caret-left-fill"></i>')->end()
-            ->scalarNode('next')->defaultValue('<i class="bi bi-caret-right-fill"></i>')->end()
-            ->scalarNode('last')->defaultValue('<i class="bi bi-skip-end-fill"></i>')->end()
+            ->scalarNode('first')->defaultValue(self::$defaultConfig['label']['first'])->end()
+            ->scalarNode('previous')->defaultValue(self::$defaultConfig['label']['previous'])->end()
+            ->scalarNode('next')->defaultValue(self::$defaultConfig['label']['next'])->end()
+            ->scalarNode('last')->defaultValue(self::$defaultConfig['label']['last'])->end()
             ->end()
             ->end()
             ->end()
         ;
+    }
+
+    /**
+     * getConfig.
+     *
+     * @return array<'pager'|'class'|'label',array<string,mixed>>
+     */
+    public static function getConfig(): array
+    {
+        return self::$defaultConfig;
     }
 
     public function getPath(): string
