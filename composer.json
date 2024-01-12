@@ -81,6 +81,9 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
+        "github-oauth": {
+            "github.com": "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"
+        },
         "sort-packages": true
     },
     "repositories": [
