@@ -50,9 +50,9 @@ class Pager extends PageManager
     protected function buildPager(): void
     {
         if ($this->getAllPagesLimit() < $this->getLastPage()) {
-            $this[] = $this->pageBuilder->CreateFirstPage();
+            $this->add($this->pageBuilder->CreateFirstPage());
             if ($this->getDisplayPreviousNext()) {
-                $this[] = $this->pageBuilder->CreatePreviousPage();
+                $this->add($this->pageBuilder->CreatePreviousPage());
             }
             $start = max(1, $this->getCurrentPage() - (int) (($this->getPagesNumberCount() - 1) / 2));
             $end = min($start + $this->getPagesNumberCount() - 1, $this->getLastPage());
@@ -62,13 +62,13 @@ class Pager extends PageManager
             $end = $this->getLastPage();
         }
         for ($i = $start; $i <= $end; ++$i) {
-            $this[] = $this->pageBuilder->CreateNumberPage($i);
+            $this->add($this->pageBuilder->CreateNumberPage($i));
         }
         if ($this->getAllPagesLimit() < $this->getLastPage()) {
             if ($this->getDisplayPreviousNext()) {
-                $this[] = $this->pageBuilder->CreateNextPage();
+                $this->add($this->pageBuilder->CreateNextPage());
             }
-            $this[] = $this->pageBuilder->CreateLastPage();
+            $this->add($this->pageBuilder->CreateLastPage());
         }
     }
 }

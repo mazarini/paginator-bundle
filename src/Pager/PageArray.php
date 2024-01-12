@@ -28,12 +28,31 @@ abstract class PageArray extends \ArrayIterator implements PageCollectionInterfa
 {
     public function append(mixed $value): void
     {
-        parent::append($value->setParent($this));
+        throw new \LogicException(sprintf('method "%s" can\'t be allowed outside class "%s"', __METHOD__, static::class));
     }
 
     public function offsetSet(mixed $key, mixed $value): void
     {
-        parent::offsetSet($key, $value->setParent($this));
+        throw new \LogicException(sprintf('method "%s" can\'t be allowed outside class "%s"', __METHOD__, static::class));
+    }
+
+    /**
+     * offSetGet.
+     *
+     * @param int $key
+     *
+     * @return AbstractPage
+     */
+    public function offSetGet(mixed $key): mixed
+    {
+        if (0 === parent::count()) {
+            $this->buildPager();
+        }
+        $page = parent::offsetGet($key);
+        if (null !== $page) {
+            return $page;
+        }
+        throw new \LogicException(sprintf('pager has a null page for key "%s"', $key));
     }
 
     public function rewind(): void
@@ -51,6 +70,11 @@ abstract class PageArray extends \ArrayIterator implements PageCollectionInterfa
         }
 
         return parent::count();
+    }
+
+    protected function add(AbstractPage $page): void
+    {
+        parent::offsetSet(null, $page->setParent($this));
     }
 
     abstract protected function buildPager(): void;
