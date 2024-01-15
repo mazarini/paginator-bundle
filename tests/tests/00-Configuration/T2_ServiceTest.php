@@ -19,14 +19,14 @@
 
 namespace App\Tests\ConfigurationPager;
 
-use App\Test\ContainerTrait;
+use App\Test\PagerTrait;
 use Mazarini\PaginatorBundle\Pager\Pager;
 use Mazarini\PaginatorBundle\Twig\Runtime\PageExtensionRuntime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class T2_ServiceTest extends KernelTestCase
 {
-    use ContainerTrait;
+    use PagerTrait;
     private Pager $pager;
     protected PageExtensionRuntime $pageExtensionRuntime;
 

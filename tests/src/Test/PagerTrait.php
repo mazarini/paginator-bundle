@@ -22,7 +22,7 @@ namespace App\Test;
 use Mazarini\PaginatorBundle\Pager\Pager;
 use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 
-trait ContainerTrait
+trait PagerTrait
 {
     use ConfigTrait;
     private PagerBuilder $pagerBuilder;

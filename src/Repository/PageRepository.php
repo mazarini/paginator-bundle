@@ -19,7 +19,6 @@
 
 namespace Mazarini\PaginatorBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Mazarini\Entity\Entity\EntityInterface;
 use Mazarini\Entity\Repository\EntityRepository;

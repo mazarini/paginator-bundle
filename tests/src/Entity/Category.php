@@ -78,8 +78,8 @@ class Category extends Entity
         switch (true) {
             case $article instanceof Article:
                 return $this->addArticle($article);
-
         }
+
         return parent::addChild($article);
     }
 

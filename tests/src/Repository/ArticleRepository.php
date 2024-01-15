@@ -20,7 +20,6 @@
 namespace App\Repository;
 
 use App\Entity\Article;
-use App\Entity\Category;
 use Doctrine\Persistence\ManagerRegistry;
 use Mazarini\Entity\Entity\EntityInterface;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
@@ -45,6 +44,6 @@ class ArticleRepository extends PageRepository
      */
     public function getNew(): EntityInterface
     {
-        return (new Article());
+        return new Article();
     }
 }

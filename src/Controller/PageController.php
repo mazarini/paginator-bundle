@@ -19,8 +19,8 @@
 
 namespace Mazarini\PaginatorBundle\Controller;
 
-use Mazarini\MessageBundle\Controller\MessageControllerTrait;
 use Mazarini\Entity\Entity\EntityInterface;
+use Mazarini\MessageBundle\Controller\MessageControllerTrait;
 use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

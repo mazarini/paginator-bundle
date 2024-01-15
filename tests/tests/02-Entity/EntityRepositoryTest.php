@@ -23,131 +23,98 @@ use App\Entity\Article;
 use App\Entity\Category;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Persistence\ObjectManager;
-use Mazarini\PaginatorBundle\Page\PageBuilder;
-use Mazarini\PaginatorBundle\Pager\Pager;
+use App\Test\PagerTrait;
+use Mazarini\Entity\Test\DoctrineTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class EntityRepositoryTest extends KernelTestCase
 {
-    protected static ObjectManager $entityManager;
-    protected static ArticleRepository $articleRepository;
-    protected static CategoryRepository $categoryRepository;
+    use DoctrineTrait;
+    use PagerTrait;
+    protected ArticleRepository $articleRepository;
+    protected CategoryRepository $categoryRepository;
 
     public static function setUpBeforeClass(): void
     {
-        $kernel = self::bootKernel();
-        $doctrine = $kernel->getContainer()->get('doctrine');
-        if ($doctrine instanceof Registry) {
-            static::$entityManager = $doctrine->getManager();
-            $repository = static::$entityManager->getRepository(Article::class);
-            if ($repository instanceof ArticleRepository) {
-                static::$articleRepository = $repository;
-            }
-            $repository = static::$entityManager->getRepository(Category::class);
-            if ($repository instanceof CategoryRepository) {
-                static::$categoryRepository = $repository;
-            }
-        }
     }
 
     protected function setup(): void
     {
-        $articles = static::$articleRepository->findAll();
-        foreach ($articles as $article) {
-            static::$entityManager->remove($article);
+        $repository = $this->getEntityManager()->getRepository(Article::class);
+        if ($repository instanceof ArticleRepository) {
+            $this->articleRepository = $repository;
+            $this->removeEntities($this->articleRepository);
         }
-        static::$entityManager->flush();
-        $categories = static::$categoryRepository->findAll();
-        foreach ($categories as $category) {
-            static::$entityManager->remove($category);
+        $repository = $this->getEntityManager()->getRepository(Category::class);
+        if ($repository instanceof CategoryRepository) {
+            $this->categoryRepository = $repository;
+            $this->removeEntities($this->categoryRepository);
         }
-        static::$entityManager->flush();
     }
 
     public function testSetup(): void
     {
-        $this->assertIsObject(static::$entityManager);
-        $this->assertIsObject(static::$articleRepository);
-        $this->assertIsObject(static::$categoryRepository);
-    }
-
-    public function testGetNew(): void
-    {
-        $article = static::$articleRepository->getNew();
-        $this->assertInstanceOf(Article::class, $article);
+        $this->assertIsObject($this->articleRepository);
+        $this->assertIsObject($this->categoryRepository);
     }
 
     public function testNoData(): void
     {
-        $pager = $this->getPager(1);
-        $articles = static::$articleRepository->getPageData($pager);
+        $pager = $this->getPager(1, 1);
+        $articles = $this->articleRepository->getPageData($pager);
         $this->assertCount(0, $articles);
         $this->assertSame(1, $pager->getLastPage());
     }
 
     public function testBadCurrentPage(): void
     {
-        $pager = $this->getPager(2);
-        $category = static::$categoryRepository->getNew()->setLabel('Label');
-        static::$entityManager->persist($category);
-        static::$entityManager->flush();
-        $categories = static::$articleRepository->getPageData($pager);
+        $this->createCategory('Label');
+        $pager = $this->getPager(2, 1);
+        $categories = $this->articleRepository->getPageData($pager);
         $this->assertCount(0, $categories);
     }
 
-    public function testGetData(): void
+    /**
+     * @dataProvider currentProvider
+     */
+    public function testGetData(?int $currentPage, int $itemCount, int $firstItem, string $label): void
     {
-        $categories = static::$categoryRepository->findAll();
-        $this->assertCount(0, $categories);
         for ($i = 0; $i < 8; ++$i) {
-            $category = static::$categoryRepository->getNew()->setLabel('Label');
-            static::$entityManager->persist($category);
+            $this->createCategory(sprintf('Label %s', $i));
         }
-        static::$entityManager->flush();
-        $categories = static::$categoryRepository->findAll();
-        $this->assertCount(8, $categories);
-
-        $pager = $this->getPager(null);
-        $categories = static::$categoryRepository->getPageData($pager);
-        $this->assertCount(8, $categories);
-        $id5 = $categories[5]->getId();
-        $id7 = $categories[7]->getId();
-
-        $pager = $this->getPager(2);
-        $categories = static::$categoryRepository->getPageData($pager);
-        $this->assertCount(3, $categories);
-        $this->assertSame($id5, $categories[2]->getId());
-
-        $pager = $this->getPager(3);
-        $categories = static::$categoryRepository->getPageData($pager);
-        $this->assertCount(2, $categories);
-        $this->assertSame($id7, $categories[1]->getId());
+        $pager = $this->getPager($currentPage, 10)
+            ->setItemsPerPage(3)
+            ->setOrderBy(['label' => 'ASC'])
+        ;
+        /**
+         * @var Category[] $categories
+         */
+        $categories = $this->categoryRepository->getPageData($pager);
+        $this->assertCount($itemCount, $categories);
+        $this->assertSame($label, $categories[$firstItem]->getLabel());
     }
 
-    private function getPager(int $currentPage = null): Pager
+    /**
+     * currentProvider.
+     *
+     * @return array<int,array<int,mixed>>
+     */
+    public function currentProvider(): array
     {
-        $pager = new Pager(
-            $this->getPageBuilder(), // $pageBuilder,
-            $currentPage,
-            true,                    // $displayPreviousNext,
-            true,                    // $displayOnePage,
-            9,                       // $allPagesLimit,
-            7,                       // $pagesNumberCount,
-            3,                       // $itemsPerPage
-        );
-
-        return $pager->setOrderBy(['id' => 'ASC']);
+        return [
+            [null, 8, 0, 'Label 0'],
+            [1, 3, 0, 'Label 0'],
+            [2, 3, 0, 'Label 3'],
+            [3, 2, 0, 'Label 6'],
+        ];
     }
 
-    private function getPageBuilder(): PageBuilder
+    protected function createCategory(string $label): Category
     {
-        return new PageBuilder(
-            'FIRST',    // $firstPageLabel
-            'PREVIOUS', // $previousPageLabel
-            'NEXT',     // $nextPageLabel
-            'LAST',     // $lastPageLabel
-        );
+        $category = $this->categoryRepository->getNew()->setLabel($label);
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+
+        return $category;
     }
 }
