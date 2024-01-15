@@ -6,8 +6,6 @@ Base to build Entity
 foo@bar:~$ composer require mazarini/paginator-bundle
 ```
 ## Utilisation
-Extends Mazarini\PaginatorBundle\Entity\Entity allow method isNew() to simple determine if create or update.
-
 Extends Mazarini\PaginatorBundle\Repository\EntityRepository allow method fillPage() to populate a paginator.
 
 Paginator just need to know :

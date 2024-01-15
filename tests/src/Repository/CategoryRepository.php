@@ -21,7 +21,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Persistence\ManagerRegistry;
-use Mazarini\PaginatorBundle\Entity\EntityInterface;
+use Mazarini\Entity\Entity\EntityInterface;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
 
 /**
@@ -40,11 +40,9 @@ class CategoryRepository extends PageRepository
     /**
      * getNew.
      *
-     * @param null|null $parent
-     *
      * @return Category
      */
-    public function getNew(mixed $parent = null): EntityInterface
+    public function getNew(): EntityInterface
     {
         return new Category();
     }

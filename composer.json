@@ -18,7 +18,8 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.17",
-        "mazarini/message-bundle": "dev-master",
+        "mazarini/entity": "^1.0",
+        "mazarini/message-bundle": "^1.0",
         "symfony/console": "^6.3|^7.0",
         "symfony/flex": "^2.4",
         "symfony/form": "^6.3|^7.0",
@@ -39,7 +40,7 @@
         "symfony/dotenv": "^6.3|^7.0",
         "symfony/maker-bundle": "^1.50",
         "symfony/monolog-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^7.0",
+        "symfony/phpunit-bridge": "^6.3|^7.0",
         "symfony/stopwatch": "^6.3|^7.0",
         "symfony/web-profiler-bundle": "^6.3|^7.0",
         "symfony/yaml": "^6.3|^7.0"
@@ -81,16 +82,9 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "github-oauth": {
-            "github.com": "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"
-        },
         "sort-packages": true
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/mazarini/message-bundle.git"
-        },
         {
             "type": "path",
             "url": "../*",

@@ -23,7 +23,8 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Mazarini\PaginatorBundle\Entity\Entity;
+use Mazarini\Entity\Entity\Entity;
+use Mazarini\Entity\Entity\EntityInterface;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category extends Entity
@@ -70,6 +71,16 @@ class Category extends Entity
         }
 
         return $this;
+    }
+
+    public function addchild(?EntityInterface $article): static
+    {
+        switch (true) {
+            case $article instanceof Article:
+                return $this->addArticle($article);
+
+        }
+        return parent::addChild($article);
     }
 
     public function removeArticle(Article $article): static

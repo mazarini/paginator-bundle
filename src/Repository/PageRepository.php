@@ -21,27 +21,13 @@ namespace Mazarini\PaginatorBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Mazarini\PaginatorBundle\Entity\EntityInterface;
+use Mazarini\Entity\Entity\EntityInterface;
+use Mazarini\Entity\Repository\EntityRepository;
 use Mazarini\PaginatorBundle\Pager\Pager;
 
-/**
- * @extends ServiceEntityRepository<EntityInterface>
- */
-abstract class PageRepository extends ServiceEntityRepository
+abstract class PageRepository extends EntityRepository
 {
     protected ManagerRegistry $registry;
-
-    public function count(array $criteria = []): int
-    {
-        return parent::count($criteria);
-    }
-
-    /**
-     * getNew.
-     *
-     * @param ?EntityInterface $parent
-     */
-    abstract public function getNew(mixed $parent): EntityInterface;
 
     /**
      * getPageData.

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a0da30ec226f3e4327f3bd2ebf7dd0e",
+    "content-hash": "df81b1cd0cf4beb375359faafbdb720b",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -1330,8 +1330,78 @@
             "time": "2022-05-23T21:33:49+00:00"
         },
         {
+            "name": "mazarini/entity",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mazarini/entity.git",
+                "reference": "142b23de2c28dd3679bffed232683871c4167048"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mazarini/entity/zipball/142b23de2c28dd3679bffed232683871c4167048",
+                "reference": "142b23de2c28dd3679bffed232683871c4167048",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^2.11",
+                "doctrine/doctrine-migrations-bundle": "^3.3",
+                "doctrine/orm": "^2.17",
+                "ext-ctype": "*",
+                "ext-iconv": "*",
+                "ext-intl": "*",
+                "php": ">=8.1",
+                "symfony/console": "^6.3|^7.0",
+                "symfony/flex": "^2.4",
+                "symfony/framework-bundle": "^6.3|^7.0",
+                "symfony/runtime": "^6.3|^7.0",
+                "symfony/validator": "^6.3|^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "symfony/debug-bundle": "^6.3|^7.0",
+                "symfony/dotenv": "^6.3|^7.0",
+                "symfony/maker-bundle": "^1.50",
+                "symfony/phpunit-bridge": "^6.3|^7.0",
+                "symfony/stopwatch": "^6.3|^7.0",
+                "symfony/yaml": "^6.3|^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": false,
+                    "docker": false
+                },
+                "public-dir": "tests/public",
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mazarini\\Entity\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Mazarini",
+                    "email": "mazarini@protonmail.com"
+                }
+            ],
+            "description": "Base tools for entities.",
+            "support": {
+                "issues": "https://github.com/mazarini/entity/issues",
+                "source": "https://github.com/mazarini/entity/tree/v1.0.0"
+            },
+            "time": "2024-01-15T13:19:51+00:00"
+        },
+        {
             "name": "mazarini/message-bundle",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mazarini/message-bundle.git",
@@ -1362,7 +1432,6 @@
                 "symfony/phpunit-bridge": "^6.3|^7.0",
                 "symfony/yaml": "^6.3|^7.0"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "symfony": {
@@ -1376,24 +1445,7 @@
                     "Mazarini\\MessageBundle\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Mazarini\\MessageBundle\\Tests\\": "tests/tests",
-                    "App\\": "tests/src/"
-                }
-            },
-            "scripts": {
-                "auto-scripts": {
-                    "cache:clear": "symfony-cmd",
-                    "assets:install %PUBLIC_DIR%": "symfony-cmd"
-                },
-                "post-install-cmd": [
-                    "@auto-scripts"
-                ],
-                "post-update-cmd": [
-                    "@auto-scripts"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -1405,8 +1457,8 @@
             ],
             "description": "Display alerts on webpage.",
             "support": {
-                "source": "https://github.com/mazarini/message-bundle/tree/master",
-                "issues": "https://github.com/mazarini/message-bundle/issues"
+                "issues": "https://github.com/mazarini/message-bundle/issues",
+                "source": "https://github.com/mazarini/message-bundle/tree/v1.0.0"
             },
             "time": "2023-12-20T21:55:05+00:00"
         },
@@ -8120,9 +8172,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "mazarini/message-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

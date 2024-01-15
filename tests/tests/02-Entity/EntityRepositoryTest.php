@@ -75,7 +75,7 @@ class EntityRepositoryTest extends KernelTestCase
 
     public function testGetNew(): void
     {
-        $article = static::$articleRepository->getNew(new Category());
+        $article = static::$articleRepository->getNew();
         $this->assertInstanceOf(Article::class, $article);
     }
 

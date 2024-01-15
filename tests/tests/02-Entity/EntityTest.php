@@ -19,7 +19,7 @@
 
 namespace App\Tests\Entity;
 
-use Mazarini\PaginatorBundle\Entity\Entity;
+use Mazarini\Entity\Entity\Entity;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase

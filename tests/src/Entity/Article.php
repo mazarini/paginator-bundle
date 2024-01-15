@@ -21,7 +21,7 @@ namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Mazarini\PaginatorBundle\Entity\Entity;
+use Mazarini\Entity\Entity\Entity;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article extends Entity
