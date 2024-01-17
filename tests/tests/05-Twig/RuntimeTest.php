@@ -45,8 +45,8 @@ class RuntimeTest extends KernelTestCase
     public function testClass(): void
     {
         $pages = $this->getPager(1)
-            ->setLastPage(10)
             ->setDisplayPreviousNext(true)
+            ->setLastPage(10)
         ;
         $this->assertCount(7, $pages);
         $runtime = new PageExtensionRuntime('common', 'current', 'disable');

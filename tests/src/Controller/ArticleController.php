@@ -22,7 +22,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Repository\ArticleRepository;
 use Mazarini\PaginatorBundle\Controller\PageController;
-use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Mazarini\PaginatorBundle\Factory\PagerFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +38,7 @@ class ArticleController extends PageController
     protected bool $displayOnePage = true;
 
     #[Route('/{id}/article/page-{page}.html', name: 'app_article_page', methods: ['GET'])]
-    public function index(PagerBuilder $pagerBuilder, ArticleRepository $articleRepository, Category $category, int $page = null): Response
+    public function index(PagerFactory $pagerFactory, ArticleRepository $articleRepository, Category $category, int $page = null): Response
     {
         $this->parent = $category;
         if (null === $page) {
@@ -47,7 +47,7 @@ class ArticleController extends PageController
         $this->parent = $category;
         $this->criterias = ['Category' => $category];
 
-        return $this->pageAction($articleRepository, $pagerBuilder, $page);
+        return $this->pageAction($articleRepository, $pagerFactory, $page);
     }
 
     protected function redirectToPage(int $page): RedirectResponse

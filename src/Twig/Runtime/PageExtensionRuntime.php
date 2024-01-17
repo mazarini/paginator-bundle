@@ -19,16 +19,21 @@
 
 namespace Mazarini\PaginatorBundle\Twig\Runtime;
 
+use Mazarini\PaginatorBundle\Config\ClassConfigInterface;
 use Mazarini\PaginatorBundle\Page\AbstractPage;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class PageExtensionRuntime implements RuntimeExtensionInterface
 {
-    public function __construct(
-        private string $classCommon,
-        private string $classCurrent,
-        private string $classDisable,
-    ) {
+    private string $classCommon;
+    private string $classCurrent;
+    private string $classDisable;
+
+    public function __construct(ClassConfigInterface $config)
+    {
+        $this->classCommon = $config->getCommon();
+        $this->classCurrent = $config->getActive();
+        $this->classDisable = $config->getDisable();
     }
 
     public function getPageClass(AbstractPage $page): string

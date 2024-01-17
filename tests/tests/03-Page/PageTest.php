@@ -19,116 +19,108 @@
 
 namespace App\Tests\Page;
 
-use Mazarini\PaginatorBundle\Page\PageBuilder;
-use Mazarini\PaginatorBundle\Pager\Pager;
-use PHPUnit\Framework\TestCase;
+use App\Test\PagerTrait;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class PageTest extends TestCase
+class PageTest extends KernelTestCase
 {
+    use PagerTrait;
+
     public function testLabel(): void
     {
-        $pageBuilder = $this->getPageBuilder();
-        $this->assertSame('FIRST', $pageBuilder->CreateFirstPage()->getLabel());
-        $this->assertSame('PREVIOUS', $pageBuilder->CreatePreviousPage()->getLabel());
-        $this->assertSame('5', $pageBuilder->CreateNumberPage(5)->getLabel());
-        $this->assertSame('NEXT', $pageBuilder->CreateNextPage()->getLabel());
-        $this->assertSame('LAST', $pageBuilder->CreateLastPage()->getLabel());
+        $pager = $this->getPager(5, 10);
+
+        $this->assertSame($this->getFirst(), $pager[0]->getLabel());
+        $this->assertSame($this->getPrevious(), $pager[1]->getLabel());
+        $this->assertSame('5', $pager[3]->getLabel());
+        $this->assertSame($this->getNext(), $pager[5]->getLabel());
+        $this->assertSame($this->getlast(), $pager[6]->getLabel());
     }
 
     public function testCurrentFirst(): void
     {
-        $pager = $this->getPager(1);
-        $pageBuilder = $this->getPageBuilder();
+        $pager = $this->getPager(1, 10);
 
-        $this->assertSame(1, $pageBuilder->CreateFirstPage()->setParent($pager)->getNumber());
-        $this->assertSame(1, $pageBuilder->CreatePreviousPage()->setParent($pager)->getNumber());
-        $this->assertSame(5, $pageBuilder->CreateNumberPage(5)->setParent($pager)->getNumber());
-        $this->assertSame(2, $pageBuilder->CreateNextPage()->setParent($pager)->getNumber());
-        $this->assertSame(7, $pageBuilder->CreateLastPage()->setParent($pager)->getNumber());
+        $this->assertSame(1, $pager[0]->getNumber());
+        $this->assertSame(1, $pager[1]->getNumber());
+        $this->assertSame(1, $pager[2]->getNumber());
+        $this->assertSame(2, $pager[3]->getNumber());
+        $this->assertSame(3, $pager[4]->getNumber());
+        $this->assertSame(2, $pager[5]->getNumber());
+        $this->assertSame(10, $pager[6]->getNumber());
 
-        $this->assertFalse($pageBuilder->CreateFirstPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreatePreviousPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateNumberPage(5)->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateNextPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateLastPage()->setParent($pager)->isCurrent());
+        $this->assertFalse($pager[0]->isCurrent());
+        $this->assertFalse($pager[1]->isCurrent());
+        $this->assertTrue($pager[2]->isCurrent());
+        $this->assertFalse($pager[3]->isCurrent());
+        $this->assertFalse($pager[4]->isCurrent());
+        $this->assertFalse($pager[5]->isCurrent());
+        $this->assertFalse($pager[6]->isCurrent());
 
-        $this->assertTrue($pageBuilder->CreateFirstPage()->setParent($pager)->isDisable());
-        $this->assertTrue($pageBuilder->CreatePreviousPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateNumberPage(5)->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateNextPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateLastPage()->setParent($pager)->isDisable());
+        $this->assertTrue($pager[0]->isDisable());
+        $this->assertTrue($pager[1]->isDisable());
+        $this->assertFalse($pager[2]->isDisable());
+        $this->assertFalse($pager[3]->isDisable());
+        $this->assertFalse($pager[4]->isDisable());
+        $this->assertFalse($pager[5]->isDisable());
+        $this->assertFalse($pager[6]->isDisable());
     }
 
     public function testCurrentMiddle(): void
     {
-        $pager = $this->getPager(5);
-        $pageBuilder = $this->getPageBuilder();
+        $pager = $this->getPager(5, 10);
 
-        $this->assertSame(1, $pageBuilder->CreateFirstPage()->setParent($pager)->getNumber());
-        $this->assertSame(4, $pageBuilder->CreatePreviousPage()->setParent($pager)->getNumber());
-        $this->assertSame(5, $pageBuilder->CreateNumberPage(5)->setParent($pager)->getNumber());
-        $this->assertSame(6, $pageBuilder->CreateNextPage()->setParent($pager)->getNumber());
-        $this->assertSame(7, $pageBuilder->CreateLastPage()->setParent($pager)->getNumber());
+        $this->assertSame(1, $pager[0]->getNumber());
+        $this->assertSame(4, $pager[1]->getNumber());
+        $this->assertSame(4, $pager[2]->getNumber());
+        $this->assertSame(5, $pager[3]->getNumber());
+        $this->assertSame(6, $pager[4]->getNumber());
+        $this->assertSame(6, $pager[5]->getNumber());
+        $this->assertSame(10, $pager[6]->getNumber());
 
-        $this->assertFalse($pageBuilder->CreateFirstPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreatePreviousPage()->setParent($pager)->isCurrent());
-        $this->assertTrue($pageBuilder->CreateNumberPage(5)->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateNextPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateLastPage()->setParent($pager)->isCurrent());
+        $this->assertFalse($pager[0]->isCurrent());
+        $this->assertFalse($pager[1]->isCurrent());
+        $this->assertFalse($pager[2]->isCurrent());
+        $this->assertTrue($pager[3]->isCurrent());
+        $this->assertFalse($pager[4]->isCurrent());
+        $this->assertFalse($pager[5]->isCurrent());
+        $this->assertFalse($pager[6]->isCurrent());
 
-        $this->assertFalse($pageBuilder->CreateFirstPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreatePreviousPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateNumberPage(5)->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateNextPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateLastPage()->setParent($pager)->isDisable());
+        $this->assertFalse($pager[0]->isDisable());
+        $this->assertFalse($pager[1]->isDisable());
+        $this->assertFalse($pager[2]->isDisable());
+        $this->assertFalse($pager[3]->isDisable());
+        $this->assertFalse($pager[4]->isDisable());
+        $this->assertFalse($pager[5]->isDisable());
+        $this->assertFalse($pager[6]->isDisable());
     }
 
     public function testCurrentLast(): void
     {
-        $pager = $this->getPager(7);
-        $pageBuilder = $this->getPageBuilder();
+        $pager = $this->getPager(10, 10);
 
-        $this->assertSame(1, $pageBuilder->CreateFirstPage()->setParent($pager)->getNumber());
-        $this->assertSame(6, $pageBuilder->CreatePreviousPage()->setParent($pager)->getNumber());
-        $this->assertSame(5, $pageBuilder->CreateNumberPage(5)->setParent($pager)->getNumber());
-        $this->assertSame(7, $pageBuilder->CreateNextPage()->setParent($pager)->getNumber());
-        $this->assertSame(7, $pageBuilder->CreateLastPage()->setParent($pager)->getNumber());
+        $this->assertSame(1, $pager[0]->getNumber());
+        $this->assertSame(9, $pager[1]->getNumber());
+        $this->assertSame(8, $pager[2]->getNumber());
+        $this->assertSame(9, $pager[3]->getNumber());
+        $this->assertSame(10, $pager[4]->getNumber());
+        $this->assertSame(10, $pager[5]->getNumber());
+        $this->assertSame(10, $pager[6]->getNumber());
 
-        $this->assertFalse($pageBuilder->CreateFirstPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreatePreviousPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateNumberPage(5)->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateNextPage()->setParent($pager)->isCurrent());
-        $this->assertFalse($pageBuilder->CreateLastPage()->setParent($pager)->isCurrent());
+        $this->assertFalse($pager[0]->isCurrent());
+        $this->assertFalse($pager[1]->isCurrent());
+        $this->assertFalse($pager[2]->isCurrent());
+        $this->assertFalse($pager[3]->isCurrent());
+        $this->assertTrue($pager[4]->isCurrent());
+        $this->assertFalse($pager[5]->isCurrent());
+        $this->assertFalse($pager[6]->isCurrent());
 
-        $this->assertFalse($pageBuilder->CreateFirstPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreatePreviousPage()->setParent($pager)->isDisable());
-        $this->assertFalse($pageBuilder->CreateNumberPage(5)->setParent($pager)->isDisable());
-        $this->assertTrue($pageBuilder->CreateNextPage()->setParent($pager)->isDisable());
-        $this->assertTrue($pageBuilder->CreateLastPage()->setParent($pager)->isDisable());
-    }
-
-    private function getPager(int $currentPage = null): Pager
-    {
-        $pager = new Pager(
-            $this->getPageBuilder(), // $pageBuilder,
-            $currentPage,
-            true,                    // $displayPreviousNext,
-            true,                    // $displayOnePage,
-            9,                       // $allPagesLimit,
-            7,                       // $pagesNumberCount,
-            3,                       // $itemsPerPage
-        );
-
-        return $pager->setlastPage(7);
-    }
-
-    private function getPageBuilder(): PageBuilder
-    {
-        return new PageBuilder(
-            'FIRST',    // $firstPageLabel
-            'PREVIOUS', // $previousPageLabel
-            'NEXT',     // $nextPageLabel
-            'LAST',     // $lastPageLabel
-        );
+        $this->assertFalse($pager[0]->isDisable());
+        $this->assertFalse($pager[1]->isDisable());
+        $this->assertFalse($pager[2]->isDisable());
+        $this->assertFalse($pager[3]->isDisable());
+        $this->assertFalse($pager[4]->isDisable());
+        $this->assertTrue($pager[5]->isDisable());
+        $this->assertTrue($pager[6]->isDisable());
     }
 }

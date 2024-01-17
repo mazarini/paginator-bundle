@@ -17,20 +17,27 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Pager;
+namespace Mazarini\PaginatorBundle\Config;
 
-use Mazarini\PaginatorBundle\Page\AbstractPage;
-
-/**
- * @extends \Iterator<int,AbstractPage>
- */
-interface PageCollectionInterface extends \Iterator, \Countable
+interface PagerConfigInterface extends PageConfigInterface
 {
-    public function getCurrentPage(): int;
+    public function getDisplayPreviousNext(): bool;
 
-    public function getLastPage(): int;
+    public function getDisplayOnePage(): bool;
 
-    public function isPagesDisplay(): bool;
+    public function getAllPagesLimit(): int;
 
-    public function isPageCurrentOK(): bool;
+    public function getPagesNumberCount(): int;
+
+    public function getItemsPerPage(): int;
+
+    public function setDisplayPreviousNext(bool $value): static;
+
+    public function setDisplayOnePage(bool $value): static;
+
+    public function setAllPagesLimit(int $value): static;
+
+    public function setPagesNumberCount(int $value): static;
+
+    public function setItemsPerPage(int $value): static;
 }

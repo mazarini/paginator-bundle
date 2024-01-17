@@ -22,6 +22,7 @@ namespace Mazarini\PaginatorBundle\Repository;
 use Doctrine\Persistence\ManagerRegistry;
 use Mazarini\Entity\Entity\EntityInterface;
 use Mazarini\Entity\Repository\EntityRepository;
+use Mazarini\PaginatorBundle\Pager\EntityPageCollectionInterface;
 use Mazarini\PaginatorBundle\Pager\Pager;
 
 abstract class PageRepository extends EntityRepository
@@ -33,14 +34,16 @@ abstract class PageRepository extends EntityRepository
      *
      * @return array<entityInterface>
      */
-    public function getPageData(Pager $paginator): array
+    public function getPageData(EntityPageCollectionInterface $paginator): array
     {
-        $count = $this->count($paginator->getCriterias());
-        $paginator->setCount($count);
-        if ($count > 0 && $paginator->getLastPage() >= $paginator->getCurrentPage()) {
-            return $this->findBy($paginator->getCriterias(), $paginator->getOrderBy(), $paginator->getLimit(), $paginator->getOffset());
+        if ($paginator instanceof Pager) {
+            $count = $this->count($paginator->getCriterias());
+            $paginator->setCount($count);
+            if (0 === $count || $paginator->isPageCurrentOK()) {
+                return [];
+            }
         }
 
-        return [];
+        return $this->findBy($paginator->getCriterias(), $paginator->getOrderBy(), $paginator->getLimit(), $paginator->getOffset());
     }
 }

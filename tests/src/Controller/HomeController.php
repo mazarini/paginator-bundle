@@ -19,7 +19,7 @@
 
 namespace App\Controller;
 
-use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Mazarini\PaginatorBundle\Factory\PagerFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,16 +33,14 @@ class HomeController extends AbstractController
     }
 
     #[Route('/twig-function', name: 'app_twig_function')]
-    public function twigFunction(PagerBuilder $pagerBuilder): Response
+    public function twigFunction(PagerFactory $pagerFactory): Response
     {
         $currentPage = 1;
         foreach ([1, 3, 7] as $currentPage) {
-            $tests[$currentPage] = $pagerBuilder->CreatePager($currentPage)
+            $tests[$currentPage] = $pagerFactory->CreateConfigurablePager($currentPage)
                 ->setAllPagesLimit(6)
                 ->setDisplayPreviousNext(true)
-            ;
-            $tests[$currentPage]->setLastPage(7);
-            $tests[$currentPage]->count();
+                ->setLastPage(7);
         }
         $cases = ['first', 'previous', 1, 3, 7, 'next', 'last'];
 
@@ -53,14 +51,14 @@ class HomeController extends AbstractController
     }
 
     #[Route('/pager/{page}', name: 'app_pager')]
-    public function page(PagerBuilder $pagerBuilder, int $page): Response
+    public function page(PagerFactory $pagerFactory, int $page): Response
     {
-        $full = $pagerBuilder->CreatePager($page)
+        $full = $pagerFactory->CreateConfigurablePager($page)
             ->setAllPagesLimit(10)
             ->setDisplayPreviousNext(true)
             ->setLastPage(9)
         ;
-        $partial = $pagerBuilder->CreatePager($page)
+        $partial = $pagerFactory->CreateConfigurablePager($page)
             ->setAllPagesLimit(8)
             ->setLastPage(9)
         ;

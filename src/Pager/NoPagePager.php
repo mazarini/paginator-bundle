@@ -17,40 +17,35 @@
  * You should have received a copy of the GNU General Public License
  */
 
-namespace Mazarini\PaginatorBundle\Page;
+namespace Mazarini\PaginatorBundle\Pager;
 
-class PageBuilder
+class NoPagePager extends \EmptyIterator implements EntityPageCollectionInterface
 {
-    public function __construct(
-        private string $firstPageLabel,
-        private string $previousPageLabel,
-        private string $nextPageLabel,
-        private string $lastPageLabel
-    ) {
+    use PagerTrait;
+
+    public function __construct()
+    {
+        $this->lastPage = 1;
+        $this->currentPage = 1;
     }
 
-    public function CreateFirstPage(): FirstPage
+    public function getOffset(): int
     {
-        return new FirstPage($this->firstPageLabel);
+        return 0;
     }
 
-    public function CreatePreviousPage(): PreviousPage
+    public function count(): int
     {
-        return new PreviousPage($this->previousPageLabel);
+        return 0;
     }
 
-    public function CreateNumberPage(int $page): NumberPage
+    public function getLimit(): ?int
     {
-        return new NumberPage($page);
+        return null;
     }
 
-    public function CreateNextPage(): NextPage
+    public function isPagesDisplay(): bool
     {
-        return new NextPage($this->nextPageLabel);
-    }
-
-    public function CreateLastPage(): LastPage
-    {
-        return new LastPage($this->lastPageLabel);
+        return false;
     }
 }

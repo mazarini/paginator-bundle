@@ -21,7 +21,7 @@ namespace Mazarini\PaginatorBundle\Controller;
 
 use Mazarini\Entity\Entity\EntityInterface;
 use Mazarini\MessageBundle\Controller\MessageControllerTrait;
-use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Mazarini\PaginatorBundle\Factory\PagerFactory;
 use Mazarini\PaginatorBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,23 +45,27 @@ abstract class PageController extends AbstractController
     protected EntityInterface $parent;
     protected string $listTemplate;
 
-    public function pageAction(PageRepository $articleRepository, PagerBuilder $pagerBuilder, int $currentPage = null): Response
+    public function pageAction(PageRepository $articleRepository, PagerFactory $pagerFactory, int $currentPage = null): Response
     {
-        $pages = $pagerBuilder->CreatePager($currentPage);
-        if (isset($this->displayPreviousNext)) {
-            $pages->setDisplayPreviousNext($this->displayPreviousNext);
-        }
-        if (isset($this->displayOnePage)) {
-            $pages->setDisplayOnePage($this->displayOnePage);
-        }
-        if (isset($this->allPagesLimit)) {
-            $pages->setAllPagesLimit($this->allPagesLimit);
-        }
-        if (isset($this->pagesNumberCount)) {
-            $pages->setPagesNumberCount($this->pagesNumberCount);
-        }
-        if (isset($this->itemsPerPage)) {
-            $pages->setItemsPerPage($this->itemsPerPage);
+        if (null === $currentPage) {
+            $pages = $pagerFactory->CreateNoPagePager();
+        } else {
+            $pages = $pagerFactory->CreateConfigurablePager($currentPage);
+            if (isset($this->displayPreviousNext)) {
+                $pages->setDisplayPreviousNext($this->displayPreviousNext);
+            }
+            if (isset($this->displayOnePage)) {
+                $pages->setDisplayOnePage($this->displayOnePage);
+            }
+            if (isset($this->allPagesLimit)) {
+                $pages->setAllPagesLimit($this->allPagesLimit);
+            }
+            if (isset($this->pagesNumberCount)) {
+                $pages->setPagesNumberCount($this->pagesNumberCount);
+            }
+            if (isset($this->itemsPerPage)) {
+                $pages->setItemsPerPage($this->itemsPerPage);
+            }
         }
         if (isset($this->orderBy)) {
             $pages->setOrderBy($this->orderBy);

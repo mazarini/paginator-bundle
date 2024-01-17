@@ -19,25 +19,53 @@
 
 namespace App\Test;
 
+use Mazarini\PaginatorBundle\Factory\PagerFactory;
+use Mazarini\PaginatorBundle\Pager\ConfigurablePager;
+use Mazarini\PaginatorBundle\Pager\NoPagePager;
 use Mazarini\PaginatorBundle\Pager\Pager;
-use Mazarini\PaginatorBundle\Pager\PagerBuilder;
 
 trait PagerTrait
 {
     use ConfigTrait;
-    private PagerBuilder $pagerBuilder;
+    private PagerFactory $pagerFactory;
 
-    protected function getPager(int $currentPage = null, int $lastPage = 1): Pager
+    protected function getPagerFactory(): PagerFactory
     {
-        if (!isset($this->pagerBuilder)) {
-            $object = $this->getContainer()->get(PagerBuilder::class);
-            if ($object instanceof PagerBuilder) {
-                $this->pagerBuilder = $object;
+        if (!isset($this->pagerFactory)) {
+            $object = $this->getContainer()->get(PagerFactory::class);
+            if ($object instanceof PagerFactory) {
+                $this->pagerFactory = $object;
             }
         }
-        if (isset($this->pagerBuilder)) {
-            return $this->pagerBuilder->CreatePager($currentPage)->setLastPage($lastPage);
+        if (isset($this->pagerFactory)) {
+            return $this->pagerFactory;
         }
-        throw new \LogicException(sprintf('Class "%s" not found in container', PagerBuilder::class));
+        throw new \LogicException(sprintf('Class "%s" not found in container', PagerFactory::class));
+    }
+
+    protected function getPConfigurablePager(int $currentPage, int $lastPage = 1): ConfigurablePager
+    {
+        return $this
+            ->getPagerFactory()
+            ->CreateConfigurablePager($currentPage)
+            ->setLastPage($lastPage)
+        ;
+    }
+
+    protected function getPager(int $currentPage, int $lastPage = 1): Pager
+    {
+        return $this
+            ->getPagerFactory()
+            ->CreatePager($currentPage)
+            ->setLastPage($lastPage)
+        ;
+    }
+
+    protected function getNoPagePager(): NoPagePager
+    {
+        return $this
+            ->getPagerFactory()
+            ->CreateNoPagePager()
+        ;
     }
 }

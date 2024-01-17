@@ -21,7 +21,7 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use Mazarini\PaginatorBundle\Controller\PageController;
-use Mazarini\PaginatorBundle\Pager\PagerBuilder;
+use Mazarini\PaginatorBundle\Factory\PagerFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,9 +47,9 @@ class CategoryController extends PageController
     protected array $orderBy = ['label' => 'ASC'];
 
     #[Route('/index.html', name: 'app_category_page', methods: ['GET'])]
-    public function index(CategoryRepository $categoryRepository, PagerBuilder $pagerBuilder): Response
+    public function index(CategoryRepository $categoryRepository, PagerFactory $pagerFactory): Response
     {
-        return $this->pageAction($categoryRepository, $pagerBuilder);
+        return $this->pageAction($categoryRepository, $pagerFactory);
     }
 
     protected function redirectToPage(int $page): RedirectResponse

@@ -19,30 +19,37 @@
 
 namespace Mazarini\PaginatorBundle\Pager;
 
-use Mazarini\PaginatorBundle\Page\PageBuilder;
-
-class PagerBuilder
+interface EntityPageCollectionInterface extends PageCollectionInterface
 {
-    public function __construct(
-        private PageBuilder $pageBuilder,
-        private bool $displayPreviousNext,
-        private bool $displayOnePage,
-        private int $allPagesLimit,
-        private int $pagesNumberCount,
-        private int $itemsPerPage,
-    ) {
-    }
+    /**
+     * getCriterias.
+     *
+     * @return array<string,mixed>
+     */
+    public function getCriterias(): array;
 
-    public function CreatePager(int $currentPage = null): Pager
-    {
-        return new Pager(
-            $this->pageBuilder,
-            $currentPage,
-            $this->displayPreviousNext,
-            $this->displayOnePage,
-            $this->allPagesLimit,
-            $this->pagesNumberCount,
-            $this->itemsPerPage
-        );
-    }
+    /**
+     * setCriterias.
+     *
+     * @param array<string,mixed> $criterias
+     */
+    public function setCriterias(array $criterias): static;
+
+    /**
+     * getOrderBy.
+     *
+     * @return array<string,'ASC'|'DESC'>
+     */
+    public function getOrderBy(): array;
+
+    /**
+     * setOrderBy.
+     *
+     * @param array<string,mixed> $orderBy
+     */
+    public function setOrderBy(array $orderBy): static;
+
+    public function getOffset(): int;
+
+    public function getLimit(): ?int;
 }

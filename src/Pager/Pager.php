@@ -19,56 +19,103 @@
 
 namespace Mazarini\PaginatorBundle\Pager;
 
-use Mazarini\PaginatorBundle\Page\PageBuilder;
+use Mazarini\PaginatorBundle\Config\PagerConfigInterface;
+use Mazarini\PaginatorBundle\Factory\PageFactory;
 
-class Pager extends PageManager
+// use Mazarini\PaginatorBundle\Page\AbstractPage;
+
+class Pager extends \AppendIterator implements EntityPageCollectionInterface
 {
+    use PagerTrait;
+    protected PageFactory $pageFactory;
+    protected PagerConfigInterface $config;
+    private bool $builded = false;
+
     public function __construct(
-        private PageBuilder $pageBuilder,
-        ?int $currentPage,
-        bool $displayPreviousNext,
-        bool $displayOnePage,
-        int $allPagesLimit,
-        int $pagesNumberCount,
-        int $itemsPerPage
+        PageFactory $pageFactory,
+        PagerConfigInterface $configDefault,
+        int $currentPage
     ) {
-        parent::__construct(
-            $currentPage,
-            $displayPreviousNext,
-            $displayOnePage,
-            $allPagesLimit,
-            $pagesNumberCount,
-            $itemsPerPage
-        );
+        $this->pageFactory = $pageFactory;
+        $this->config = clone $configDefault;
+        $this->currentPage = $currentPage;
+    }
+
+    public function getOffset(): int
+    {
+        return 0;
+    }
+
+    public function getLimit(): ?int
+    {
+        return null;
     }
 
     public function isPagesDisplay(): bool
     {
-        return $this->getDisplayOnePage() || $this->getLastPage() > 1;
+        return false;
     }
 
-    protected function buildPager(): void
+    public function setCount(int $count): static
     {
-        if ($this->getAllPagesLimit() < $this->getLastPage()) {
-            $this->add($this->pageBuilder->CreateFirstPage());
-            if ($this->getDisplayPreviousNext()) {
-                $this->add($this->pageBuilder->CreatePreviousPage());
+        if (0 === $count) {
+            return $this->setLastPage(1);
+        }
+
+        return $this->setLastPage((int) (($count - 1) / $this->config->getItemsPerPage()) + 1);
+    }
+
+    public function rewind(): void
+    {
+        $this->build();
+        parent::rewind();
+    }
+
+    public function count(): int
+    {
+        $this->build();
+
+        return iterator_count($this);
+    }
+
+    public function append(mixed $pages): void
+    {
+        throw new \RuntimeException('Method append is not allowed outside of object');
+    }
+
+    private function build(): static
+    {
+        if ($this->builded) {
+            return $this;
+        }
+        $this->builded = true;
+        $pages = [];
+        if ($this->config->getAllPagesLimit() < $this->getLastPage()) {
+            $pages[] = $this->pageFactory->CreateFirstPage();
+            if ($this->config->getDisplayPreviousNext()) {
+                $pages[] = $this->pageFactory->CreatePreviousPage();
             }
-            $start = max(1, $this->getCurrentPage() - (int) (($this->getPagesNumberCount() - 1) / 2));
-            $end = min($start + $this->getPagesNumberCount() - 1, $this->getLastPage());
-            $start = max(1, $end - $this->getPagesNumberCount() + 1);
+            $start = max(1, $this->getCurrentPage() - (int) (($this->config->getPagesNumberCount() - 1) / 2));
+            $end = min($start + $this->config->getPagesNumberCount() - 1, $this->getLastPage());
+            $start = max(1, $end - $this->config->getPagesNumberCount() + 1);
         } else {
             $start = 1;
             $end = $this->getLastPage();
         }
         for ($i = $start; $i <= $end; ++$i) {
-            $this->add($this->pageBuilder->CreateNumberPage($i));
+            $pages[] = $this->pageFactory->CreateNumberPage($i);
         }
-        if ($this->getAllPagesLimit() < $this->getLastPage()) {
-            if ($this->getDisplayPreviousNext()) {
-                $this->add($this->pageBuilder->CreateNextPage());
+        if ($this->config->getAllPagesLimit() < $this->getLastPage()) {
+            if ($this->config->getDisplayPreviousNext()) {
+                $pages[] = $this->pageFactory->CreateNextPage();
             }
-            $this->add($this->pageBuilder->CreateLastPage());
+            $pages[] = $this->pageFactory->CreateLastPage();
         }
+        foreach ($pages as $page) {
+            $page->setParent($this);
+        }
+        parent::append(new \ArrayIterator($pages));
+
+        return $this;
     }
 }
